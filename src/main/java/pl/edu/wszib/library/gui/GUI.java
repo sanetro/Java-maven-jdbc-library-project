@@ -68,26 +68,22 @@ public class GUI {
         return this.scanner.nextLine();
     }
 
-    public String readUserName() { System.out.println("Name:"); return scanner.nextLine(); }
-    public String readUserSurname() { System.out.println("Surname:"); return scanner.nextLine(); }
-    public String readUserLogin() { System.out.println("Login:"); return scanner.nextLine(); }
-    public String readUserPassword() { System.out.println("Password:"); return scanner.nextLine(); }
+    public String readTextByCalled(String labelName) { System.out.println(labelName+ ":"); return scanner.nextLine(); }
+
 
     public User readLoginAndPassword() {
         User user = new User();
-        System.out.println("Login:");
-        user.setLogin(this.scanner.nextLine());
-        System.out.println("Password:");
-        user.setPassword(this.scanner.nextLine());
+        user.setLogin(this.readTextByCalled("Login"));
+        user.setPassword(this.readTextByCalled("Password"));
         return user;
     }
 
     public User readRegisterFields() {
         User user = new User();
-        user.setName(this.readUserName());
-        user.setSurname(this.readUserSurname());
-        user.setLogin(this.readUserLogin());
-        user.setPassword(this.readUserPassword());
+        user.setName(this.readTextByCalled("Name"));
+        user.setSurname(this.readTextByCalled("Surname"));
+        user.setLogin(this.readTextByCalled("Login"));
+        user.setPassword(this.readTextByCalled("Password"));
         return user;
     }
     public static GUI getInstance() {

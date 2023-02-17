@@ -79,7 +79,7 @@ public class Core {
                         case "4": // Give user admin permission
                             System.out.println(
                                     this.authenticator.UserToAdmin(
-                                            this.gui.readUserLogin()));
+                                            this.gui.readTextByCalled("Login")));
                             break;
 
                         case "5": // Logout

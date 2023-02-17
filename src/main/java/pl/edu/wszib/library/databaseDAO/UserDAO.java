@@ -1,11 +1,14 @@
-package pl.edu.wszib.library.database;
+package pl.edu.wszib.library.databaseDAO;
 
+import pl.edu.wszib.library.database.UserDB;
 import pl.edu.wszib.library.models.User;
-public class UserDB {
-    private User[] users = new User[2];
-    private static final UserDB instance = new UserDB();
 
-    private UserDB() {
+public class UserDAO {
+    private User[] users = new User[2];
+    private static final UserDAO instance = new UserDAO();
+
+    private UserDAO() {
+
     }
 
     public User findByLogin(String login) {
@@ -37,7 +40,8 @@ public class UserDB {
         return "2";
     }
 
-    public static UserDB getInstance() {
+    public static UserDAO getInstance() {
         return instance;
     }
 }
+

@@ -14,7 +14,8 @@ public class GUI {
 
     public String showMenu() {
         System.out.println("1. Login");
-        System.out.println("2. Exit");
+        System.out.println("1. Register");
+        System.out.println("3. Exit");
         return scanner.nextLine();
     }
 
@@ -30,21 +31,17 @@ public class GUI {
         return scanner.nextLine();
     }
 
-    public String readUserLogin() {
-        System.out.println("Nazwa usera:");
-        return scanner.nextLine();
-    }
 
-    public String readUserPassword() {
-        System.out.println("Nazwa usera:");
-        return scanner.nextLine();
-    }
+
+
+
 
     public String showUserPanel() {
         System.out.println("\n=== Panel Userowy ===");
-        System.out.println("1. Lista produktow");
-        System.out.println("2. Kup Produkt");
-        System.out.println("3. Wyloguj");
+        System.out.println("1. Search book");
+        System.out.println("2. Loan the book");
+        System.out.println("3. List of books");
+        System.out.println("4. Wyloguj");
         return scanner.nextLine();
     }
 
@@ -71,12 +68,26 @@ public class GUI {
         return this.scanner.nextLine();
     }
 
+    public String readUserName() { System.out.println("Name:"); return scanner.nextLine(); }
+    public String readUserSurname() { System.out.println("Surname:"); return scanner.nextLine(); }
+    public String readUserLogin() { System.out.println("Login:"); return scanner.nextLine(); }
+    public String readUserPassword() { System.out.println("Password:"); return scanner.nextLine(); }
+
     public User readLoginAndPassword() {
         User user = new User();
         System.out.println("Login:");
         user.setLogin(this.scanner.nextLine());
         System.out.println("Password:");
         user.setPassword(this.scanner.nextLine());
+        return user;
+    }
+
+    public User readRegisterFields() {
+        User user = new User();
+        user.setName(this.readUserName());
+        user.setSurname(this.readUserSurname());
+        user.setLogin(this.readUserLogin());
+        user.setPassword(this.readUserPassword());
         return user;
     }
     public static GUI getInstance() {

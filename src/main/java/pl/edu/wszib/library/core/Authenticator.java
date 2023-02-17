@@ -8,6 +8,7 @@ import pl.edu.wszib.library.models.User;
 public class Authenticator {
     final UserDB userDB = UserDB.getInstance();
     final ProductsDB productsDB = ProductsDB.getInstance();
+    final Connection connection = Connection.getInstance();
     private User loggedUser = null;
     private final String seed = "razdwa!3nie3trzyTYLKO2two!";
     private static final Authenticator instance = new Authenticator();
@@ -24,13 +25,15 @@ public class Authenticator {
         }
     }
     public boolean register(User user) {
-        if(this.userDB.findByLogin(user.getLogin()) == null) {
+        //if(this.userDB.findByLogin(user.getLogin()) == null) {
             user.setPassword(DigestUtils.md5Hex(user.getPassword() + this.seed));
+            System.out.println(DigestUtils.md5Hex(user.getPassword() + this.seed)); // handicap
             user.setRole(User.Role.USER);
-            userDB.addUser(user);
+            connection.connect();
+            connection.saveUser(user);
             return true;
-        }
-        else return false;
+        //}
+        //else return false;
     }
 
     public String checkProduct(int orderedId, int orderedQuantity) {

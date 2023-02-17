@@ -31,7 +31,7 @@ public class Core {
                         break;
 
                     case "2":
-                        if (this.authenticator.register(this.gui.readLoginAndPassword()))
+                        if (this.authenticator.register(this.gui.readRegisterFields()))
                             System.out.println("Zarejstrowano pomyslnie");
                         else System.out.println("Rejestracja niepowodzenie");
                         break;

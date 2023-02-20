@@ -8,6 +8,9 @@ import java.sql.Statement;
 import pl.edu.wszib.library.models.User;
 public class Connection {
     public static java.sql.Connection connection;
+
+
+
     private static final Connection instance = new Connection();
     public Connection () {
 

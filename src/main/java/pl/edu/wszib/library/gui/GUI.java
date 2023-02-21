@@ -20,7 +20,7 @@ public class GUI {
     }
 
     public String showAdminPanel() {
-        System.out.println("\n=== Panel ===");
+        System.out.println("\n=== Admin Panel ===");
         System.out.println("1. Add book");
         System.out.println("2. Search book");
         System.out.println("3. Loan the book");
@@ -30,18 +30,12 @@ public class GUI {
         System.out.println("7. Logout");
         return scanner.nextLine();
     }
-
-
-
-
-
-
     public String showUserPanel() {
-        System.out.println("\n=== Panel Userowy ===");
+        System.out.println("\n=== User Panel ===");
         System.out.println("1. Search book");
         System.out.println("2. Loan the book");
         System.out.println("3. List of books");
-        System.out.println("4. Wyloguj");
+        System.out.println("4. Logout");
         return scanner.nextLine();
     }
 

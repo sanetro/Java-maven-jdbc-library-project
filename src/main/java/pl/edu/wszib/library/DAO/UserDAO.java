@@ -5,7 +5,7 @@ import pl.edu.wszib.library.models.Role;
 import pl.edu.wszib.library.models.User;
 import java.sql.*;
 import java.util.ArrayList;
-import pl.edu.wszib.library.models.User;
+
 
 
 
@@ -13,14 +13,12 @@ public class UserDAO {
     private ArrayList<User> users =  new ArrayList<>();
     private static final UserDAO instance = new UserDAO();
     private static final ConnectionDAO conn = ConnectionDAO.getInstance();
-    private static Connection connection = conn.readyConnect();
+    private static Connection connection = conn.connect();
 
     private UserDAO() {
-
     }
 
     public static void saveUser(User user) {
-
         try {
             String sql = "INSERT INTO users (name, surname, login, password, role) VALUES (?,?,?,?,?)";
 
@@ -40,7 +38,6 @@ public class UserDAO {
     }
 
     public static User getUserByLogin(String login) {
-        User tmp;
         try {
             String sql = "SELECT * FROM users WHERE login = ?";
 
@@ -50,15 +47,13 @@ public class UserDAO {
 
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {
-                tmp = new User(
+                return new User(
                         rs.getInt("id"),
                         rs.getString("name"),
                         rs.getString("surname"),
                         rs.getString("login"),
                         rs.getString("password"),
                         Role.valueOf(rs.getString("role")));
-
-                return tmp;
             }
         } catch (SQLException e) {
             System.out.println("Fatal error");

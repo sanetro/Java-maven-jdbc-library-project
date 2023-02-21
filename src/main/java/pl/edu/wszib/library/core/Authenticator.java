@@ -18,27 +18,23 @@ public class Authenticator {
     private Authenticator() {
 
     }
-
     public void authenticate(User user) {
-        UserDAO userDAO = UserDAO.getInstance();
-        String login = user.getLogin();
-        User userFromDB = userDAO.getUserByLogin(login);
-
+        User userFromDB = this.userDAO.getUserByLogin(user.getLogin());
         if(userFromDB != null &&
                 userFromDB.getPassword().equals(
-                        (user.getPassword()))) {
-            loggedUser = userFromDB;
+                        DigestUtils.md5Hex(user.getPassword() + this.seed))) {
+            this.loggedUser = userFromDB;
         }
     }
     public boolean register(User user) {
-        //if(this.userDB.findByLogin(user.getLogin()) == null) {
+        if(this.userDAO.getUserByLogin(user.getLogin()) == null) {
             user.setPassword(DigestUtils.md5Hex(user.getPassword() + this.seed));
-            System.out.println(DigestUtils.md5Hex(user.getPassword() + this.seed)); // handicap
+            //System.out.println(DigestUtils.md5Hex(user.getPassword() + this.seed)); // handicap
             user.setRole(Role.USER);
             userDAO.saveUser(user);
             return true;
-        //}
-        //else return false;
+        }
+        else return false;
     }
 
     public String checkProduct(int orderedId, int orderedQuantity) {

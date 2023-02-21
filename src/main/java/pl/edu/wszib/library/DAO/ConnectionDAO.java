@@ -14,18 +14,13 @@ public class ConnectionDAO {
     public ConnectionDAO () {
     }
 
-    public void connect() {
+    public Connection connect() {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url, user, password);
         } catch (ClassNotFoundException | SQLException e) {
             throw new RuntimeException(e);
         }
-
-    }
-
-    public Connection readyConnect() {
-        connect();
         return conn;
     }
 

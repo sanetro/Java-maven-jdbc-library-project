@@ -61,27 +61,30 @@ public class UserDAO {
         return null;
     }
 
-
-    public User findByLogin(String login) {
-        for(User user : this.users) {
-            if(user.getLogin().equals(login)) {
-                return user;
-            }
-        }
-        return null;
-    }
-
-
-
     public String checkRoleToAdmin(String login) {
-        if (this.findByLogin(login) != null) {
-            if (this.findByLogin(login).getRole() == Role.ADMIN) {
+        if (this.getUserByLogin(login) != null) {
+            if (this.getUserByLogin(login).getRole() == Role.ADMIN) {
                 return "1";
             }
-            this.findByLogin(login).setRole(Role.ADMIN);
+            updateUser(getUserByLogin(login));
             return "0";
         }
         return "2";
+    }
+
+    public static void updateUser(User user) {
+        try {
+            String sql = "UPDATE users SET role = ? WHERE login = ?";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setString(1, Role.ADMIN.toString());
+            ps.setString(2, user.getLogin());
+
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static UserDAO getInstance() {

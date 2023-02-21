@@ -1,14 +1,23 @@
 package pl.edu.wszib.library.core;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import pl.edu.wszib.library.DAO.BookDAO;
 import pl.edu.wszib.library.DAO.UserDAO;
 import pl.edu.wszib.library.database.ProductsDB;
+import pl.edu.wszib.library.models.Book;
 import pl.edu.wszib.library.models.Role;
 import pl.edu.wszib.library.models.User;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Authenticator {
 
     final UserDAO userDAO = UserDAO.getInstance();
+    final BookDAO bookDAO = BookDAO.getInstance();
+
     final ProductsDB productsDB = ProductsDB.getInstance();
 
     private User loggedUser = null;
@@ -27,6 +36,15 @@ public class Authenticator {
         }
     }
     public boolean register(User user) {
+        // No blank labels
+        if(user.getPassword() == null || user.getLogin() == null ||
+                user.getName() == null || user.getSurname() == null ||
+                user.getPassword().equals("") || user.getLogin().equals("") ||
+                user.getName().equals("") || user.getSurname().equals("")) {
+            System.out.println(user.getPassword());
+            return false;
+        }
+
         if(this.userDAO.getUserByLogin(user.getLogin()) == null) {
             user.setPassword(DigestUtils.md5Hex(user.getPassword() + this.seed));
             //System.out.println(DigestUtils.md5Hex(user.getPassword() + this.seed)); // handicap
@@ -35,6 +53,31 @@ public class Authenticator {
             return true;
         }
         else return false;
+    }
+
+    public String addBookAgent(Book book) {
+        /*
+        ISBN 978-0-596-52068-7
+        ISBN-13: 978-0-596-52068-7
+        978 0 596 52068 7
+        9780596520687
+        0-596-52068-9
+        0 512 52068 9
+        ISBN-10 0-596-52068-9
+        ISBN-10: 0-596-52068-9
+        */
+        String regexISBN = "^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}" +
+                "$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$";
+        String regexDate = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$";
+
+        Matcher isbnValidate = Pattern.compile(regexISBN).matcher(book.getIsbn());
+        Matcher dateValidate = Pattern.compile(regexDate).matcher(book.getDate());
+        if (isbnValidate.matches() && dateValidate.matches()) {
+            this.bookDAO.addBook(book);
+            return "Book added successfully";
+        }
+        return "Values aren't in specific format.";
+
     }
 
     public String checkProduct(int orderedId, int orderedQuantity) {
@@ -64,16 +107,16 @@ public class Authenticator {
         String result;
         switch (userDAO.checkRoleToAdmin(login)) {
             case "0":
-                result = "Rola admina została przyznana";
+                result = "Admin role deploy";
                 break;
             case "1":
-                result = "Podany user jest już Adminem";
+                result = "User already has admin privileges";
                 break;
             case "2":
-                result = "Nie znaleziono usera";
+                result = "Couldn't find user";
                 break;
             default:
-                result = "Nieznany błąd";
+                result = "Undefined error";
                 break;
         }
         return result;

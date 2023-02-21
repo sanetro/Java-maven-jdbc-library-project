@@ -28,24 +28,25 @@ public class Core {
                     case "1":
                         this.authenticator.authenticate(this.gui.readLoginAndPassword());
                         isLogged = this.authenticator.getLoggedUser() != null;
-                        if (!isLogged) System.out.println("Autentykacja niepowodzenie");
+                        if (!isLogged) System.out.println("Authentication failed");
                         break;
 
                     case "2":
                         if (this.authenticator.register(this.gui.readRegisterFields()))
-                            System.out.println("Zarejstrowano pomyslnie");
-                        else System.out.println("Rejestracja niepowodzenie");
+                            System.out.println("Successful.");
+                        else System.out.println("Authentication failed");
                         break;
 
                     case "3":
                         System.out.println("Bye bye..");
                         this.authenticator.unmountLoggedUser();
+
                         running = false;
                         isLogged = true;
                         break;
 
                     default:
-                        System.out.println("Nie ma takiej opcji!");
+                        System.out.println("Undefined option");
                         break;
                 }
             }
@@ -58,8 +59,9 @@ public class Core {
                 {
                     switch (this.gui.showAdminPanel())
                     {
-                        case "1": // Show product list
-                            this.gui.listProduct();
+                        case "1": // Add book
+                            System.out.println(
+                                    this.authenticator.addBookAgent(this.gui.readAddBookFields()));
                             break;
 
                         case "2": // Buy product

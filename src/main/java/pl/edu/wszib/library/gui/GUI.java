@@ -4,6 +4,8 @@ import java.util.Scanner;
 import pl.edu.wszib.library.models.User;
 import pl.edu.wszib.library.database.ProductsDB;
 import pl.edu.wszib.library.models.Product;
+import pl.edu.wszib.library.models.Book;
+
 public class GUI {
     private final Scanner scanner = new Scanner(System.in);
     final ProductsDB productsDB = ProductsDB.getInstance();
@@ -62,7 +64,9 @@ public class GUI {
         return this.scanner.nextLine();
     }
 
-    public String readTextByCalled(String labelName) { System.out.println(labelName+ ":"); return scanner.nextLine(); }
+    public String readTextByCalled(String labelName) {
+        System.out.println(labelName+ ":"); return scanner.nextLine();
+    }
 
 
     public User readLoginAndPassword() {
@@ -80,6 +84,17 @@ public class GUI {
         user.setPassword(this.readTextByCalled("Password"));
         return user;
     }
+
+    public Book readAddBookFields() {
+        Book book = new Book();
+        book.setIsbn(this.readTextByCalled("ISBN"));
+        book.setTitle(this.readTextByCalled("Title"));
+        book.setAuthor(this.readTextByCalled("Author"));
+        book.setDate(this.readTextByCalled("Date (yyyy-mm-dd)"));
+        return book;
+    }
+
+
     public static GUI getInstance() {
         return instance;
     }

@@ -4,8 +4,10 @@ public class Book {
     public static String isbn;
     public static String title;
     public static String author;
-    public static String date; // yyyy-mm-
+    public static String date; // yyyy-mm-dd
 
+    public Book (){
+    }
     public Book (String isbn, String title, String author, String date) {
         this.isbn = isbn;
         this.title = title;

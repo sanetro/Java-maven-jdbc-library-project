@@ -2,6 +2,7 @@ package pl.edu.wszib.library.core;
 
 import pl.edu.wszib.library.database.ProductsDB;
 import pl.edu.wszib.library.gui.GUI;
+import pl.edu.wszib.library.models.Role;
 import pl.edu.wszib.library.models.User;
 
 public class Core {
@@ -51,7 +52,7 @@ public class Core {
 
             if(running == false) break;
 
-            if (this.authenticator.getLoggedUser().getRole() == User.Role.ADMIN)
+            if (this.authenticator.getLoggedUser().getRole() == Role.ADMIN)
             {
                 while (isLogged)
                 {
@@ -94,7 +95,7 @@ public class Core {
                     }
                 }
             }
-            else if (this.authenticator.getLoggedUser().getRole() == User.Role.USER)
+            else if (this.authenticator.getLoggedUser().getRole() == Role.USER)
             {
                 while (isLogged)
                 {

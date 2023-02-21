@@ -1,14 +1,16 @@
 package pl.edu.wszib.library.core;
 
 import org.apache.commons.codec.digest.DigestUtils;
+import pl.edu.wszib.library.DAO.UserDAO;
 import pl.edu.wszib.library.database.ProductsDB;
-import pl.edu.wszib.library.database.UserDB;
+import pl.edu.wszib.library.models.Role;
 import pl.edu.wszib.library.models.User;
 
 public class Authenticator {
-    final UserDB userDB = UserDB.getInstance();
+
+    final UserDAO userDAO = UserDAO.getInstance();
     final ProductsDB productsDB = ProductsDB.getInstance();
-    final Connection connection = Connection.getInstance();
+
     private User loggedUser = null;
     private final String seed = "razdwa!3nie3trzyTYLKO2two!";
     private static final Authenticator instance = new Authenticator();
@@ -16,21 +18,24 @@ public class Authenticator {
     private Authenticator() {
 
     }
+
     public void authenticate(User user) {
-        User userFromDB = this.userDB.findByLogin(user.getLogin());
+        UserDAO userDAO = UserDAO.getInstance();
+        String login = user.getLogin();
+        User userFromDB = userDAO.getUserByLogin(login);
+
         if(userFromDB != null &&
                 userFromDB.getPassword().equals(
-                        DigestUtils.md5Hex(user.getPassword() + this.seed))) {
-            this.loggedUser = userFromDB;
+                        (user.getPassword()))) {
+            loggedUser = userFromDB;
         }
     }
     public boolean register(User user) {
         //if(this.userDB.findByLogin(user.getLogin()) == null) {
             user.setPassword(DigestUtils.md5Hex(user.getPassword() + this.seed));
             System.out.println(DigestUtils.md5Hex(user.getPassword() + this.seed)); // handicap
-            user.setRole(User.Role.USER);
-            connection.connect();
-            connection.saveUser(user);
+            user.setRole(Role.USER);
+            userDAO.saveUser(user);
             return true;
         //}
         //else return false;
@@ -61,7 +66,7 @@ public class Authenticator {
 
     public String UserToAdmin(String login) {
         String result;
-        switch (userDB.checkRoleToAdmin(login)) {
+        switch (userDAO.checkRoleToAdmin(login)) {
             case "0":
                 result = "Rola admina została przyznana";
                 break;

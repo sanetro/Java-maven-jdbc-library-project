@@ -1,5 +1,6 @@
 package pl.edu.wszib.library.models;
 
+import pl.edu.wszib.library.models.Role;
 public class User {
     private int id;
     private String name;
@@ -8,7 +9,7 @@ public class User {
     private String password;
     private Role role;
 
-    public User(int id, String name, String Surname, String login, String password, Role role) {
+    public User(int id, String name, String surname, String login, String password, Role role) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -52,8 +53,15 @@ public class User {
         this.role = role;
     }
 
-    public enum Role {
-        ADMIN,
-        USER
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("User{");
+        sb.append("id=").append(id);
+        sb.append(", login='").append(login).append('\'');
+        sb.append(", password='").append(password).append('\'');
+        sb.append(", role=").append(role);
+        sb.append('}');
+        return sb.toString();
     }
+
+
 }

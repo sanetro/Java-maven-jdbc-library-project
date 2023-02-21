@@ -1,12 +1,19 @@
 package pl.edu.wszib.library.database;
 
+import pl.edu.wszib.library.models.Role;
 import pl.edu.wszib.library.models.User;
+
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class UserDB {
     private User[] users = new User[2];
     private static final UserDB instance = new UserDB();
 
     private UserDB() {
     }
+
+
 
     public User findByLogin(String login) {
         for(User user : this.users) {
@@ -28,10 +35,10 @@ public class UserDB {
 
     public String checkRoleToAdmin(String login) {
         if (this.findByLogin(login) != null) {
-            if (this.findByLogin(login).getRole() == User.Role.ADMIN) {
+            if (this.findByLogin(login).getRole() == Role.ADMIN) {
                 return "1";
             }
-            this.findByLogin(login).setRole(User.Role.ADMIN);
+            this.findByLogin(login).setRole(Role.ADMIN);
             return "0";
         }
         return "2";

@@ -2,9 +2,11 @@ package pl.edu.wszib.library.DAO;
 
 import pl.edu.wszib.library.models.Book;
 import pl.edu.wszib.library.models.Role;
+import pl.edu.wszib.library.models.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class BookDAO {
@@ -34,4 +36,23 @@ public class BookDAO {
         return instance;
     }
 
+    public static Book searchBook(Book book) {
+        try {
+            String sql = "SELECT * FROM books WHERE isbn = ?";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, book.getIsbn());
+
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                return new Book(rs.getString("isbn"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getString("date"));
+            }
+        } catch (SQLException e) {
+            System.out.println("Fatal error");
+        }
+        return null;
+    }
 }

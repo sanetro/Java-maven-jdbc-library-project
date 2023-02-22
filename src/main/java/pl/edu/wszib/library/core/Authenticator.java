@@ -92,15 +92,28 @@ public class Authenticator {
 
 
     public String orderBookValidator(String name, String surname, String title) {
-        if (name.equals("") || surname.equals("") || title.equals("")) {
+        List<Book> books = bookDAO.getAllBooks();
+        List<User> users = userDAO.getAllUsers();
+        if (name.equals("") || surname.equals("") || title.equals(""))
+        {
             return "Values aren't in specific format or are blank";
-        } else {
-            if (this.loanDAO.saveLoan(name, surname, title)) {
-                return "Loan save successful.";
+        }
+        else
+        {
+            if (this.bookDAO.searchBookByTitle(title) &&
+                    this.userDAO.getSessionUser().getName().equals(name) &&
+                    this.userDAO.getSessionUser().getSurname().equals(surname))
+            {
+                if (this.loanDAO.saveLoan(name, surname, title))
+                {
+                    return "Loan save successful.";
+                }
             }
-            else {
-                return "Loan save failed.";
+            else
+            {
+                return "Authentication failed.";
             }
+            return "Loan save failed.";
         }
     }
 

@@ -54,9 +54,25 @@ public class BookDAO {
         return false;
     }
 
+    public boolean searchBookByTitle(String title) {
+        try {
+            String sql = "SELECT * FROM books WHERE title = ?";
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, title);
+
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            System.out.println("Fatal error");
+        }
+        return false;
+    }
     public List<Book> getAllBooks(){
         List<Book> result = new ArrayList<>();
-        try{
+        try {
             String sql = "SELECT isbn, title, author, date FROM books";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();

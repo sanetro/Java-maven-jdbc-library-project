@@ -24,7 +24,7 @@ public class GUI {
     public String showAdminPanel() {
         System.out.println("\n=== Admin Panel ===");
         System.out.println("1. Add book");
-        System.out.println("2. Search book");
+        System.out.println("2. List of all books");
         System.out.println("3. Loan the book");
         System.out.println("4. List of books");
         System.out.println("5. List of loans");
@@ -51,12 +51,9 @@ public class GUI {
         return scanner.nextInt();
     }
 
-    public void listProduct() {
-        System.out.format("%-5s %-5s %30s %10.2s %10s %10s %10s\n", "ID", "FIRMA", "NAZWA", "CENA", "ILOŚĆ", "MAGAZYN", "KATEGORIA");
-        System.out.println("--------------------------------------------------------------------------------------------");
-        for(Product product : this.productsDB.getProducts()) {
-            System.out.println(product);
-        }
+    public void layoutBooks() {
+        System.out.println("ISBN\t\tTITLE\t\tAUTHOR\t\tNAME");
+        System.out.println("--------------------------------------------------------------------------");
     }
 
     public String readPlate() {

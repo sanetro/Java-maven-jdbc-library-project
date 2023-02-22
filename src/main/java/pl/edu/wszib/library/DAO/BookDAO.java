@@ -8,13 +8,15 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BookDAO {
     private static final BookDAO instance = new BookDAO();
     private static final ConnectionDAO conn = ConnectionDAO.getInstance();
     private static Connection connection = conn.connect();
 
-    public static void addBook(Book book) {
+    public void addBook(Book book) {
         try {
             String sql = "INSERT INTO books VALUES (?,?,?,?)";
 
@@ -36,7 +38,7 @@ public class BookDAO {
         return instance;
     }
 
-    public static Book searchBook(Book book) {
+    public boolean searchExistsBook(Book book) {
         try {
             String sql = "SELECT * FROM books WHERE isbn = ?";
 
@@ -45,14 +47,38 @@ public class BookDAO {
 
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {
-                return new Book(rs.getString("isbn"),
-                        rs.getString("title"),
-                        rs.getString("author"),
-                        rs.getString("date"));
+                return true;
             }
         } catch (SQLException e) {
             System.out.println("Fatal error");
         }
-        return null;
+        return false;
+    }
+
+    public List<Book> getAllBooks(){
+        List<Book> result = new ArrayList<>();
+        try{
+            String sql = "SELECT isbn, title, author, date FROM books";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                result.add(new Book(
+                        rs.getString("isbn"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getString("date")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+    public void arrayLayout(List<Book> books) {
+        try {
+            books.forEach(System.out::println);
+        } catch (Exception e) {
+            System.out.println("List is empty");
+        }
     }
 }

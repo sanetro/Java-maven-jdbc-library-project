@@ -46,4 +46,17 @@ public class Book {
     public static void setTitle(String title) {
         Book.title = title;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(isbn);
+        sb.append("\t\t");
+        sb.append(title);
+        sb.append("\t\t");
+        sb.append(author);
+        sb.append("\t\t");
+        sb.append(date);
+        return sb.toString();
+    }
 }

@@ -73,7 +73,7 @@ public class Authenticator {
         Matcher isbnValidate = Pattern.compile(regexISBN).matcher(book.getIsbn());
         Matcher dateValidate = Pattern.compile(regexDate).matcher(book.getDate());
         if (isbnValidate.matches() && dateValidate.matches()) {
-            if (this.bookDAO.searchBook(book) == null){
+            if (!this.bookDAO.searchExistsBook(book)){
                 this.bookDAO.addBook(book);
                 return "Book added successfully";
             }
@@ -82,6 +82,10 @@ public class Authenticator {
         }
         return "Values aren't in specific format.";
 
+    }
+
+    public void showBookList() {
+        this.bookDAO.arrayLayout(this.bookDAO.getAllBooks());
     }
 
     public String checkProduct(int orderedId, int orderedQuantity) {

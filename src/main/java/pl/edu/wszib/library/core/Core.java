@@ -64,12 +64,14 @@ public class Core {
                                     this.authenticator.addBookAgent(this.gui.readAddBookFields()));
                             break;
 
-                        case "2": // Buy product
-                            System.out.println(
+                        case "2": // List all books
+                            this.gui.layoutBooks();
+                            this.authenticator.showBookList();
+                            /*System.out.println(
                                     this.authenticator.checkProduct(
                                             this.gui.readId(),
                                             this.gui.readQuantity()
-                                    ));
+                                    ));*/
                             break;
 
                         case "3": // Increase product quantity
@@ -85,7 +87,7 @@ public class Core {
                                             this.gui.readTextByCalled("Login")));
                             break;
 
-                        case "5": // Logout
+                        case "7": // Logout
                             System.out.println("Wylogowano");
                             this.authenticator.unmountLoggedUser();
                             isLogged = false;
@@ -104,7 +106,7 @@ public class Core {
                     switch (this.gui.showUserPanel())
                     {
                         case "1": // Show product list
-                            this.gui.listProduct();
+                            //this.gui.listProduct();
                             break;
 
                         case "2": // Buy product

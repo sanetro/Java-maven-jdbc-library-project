@@ -18,7 +18,7 @@ public class UserDAO {
     private UserDAO() {
     }
 
-    public static void saveUser(User user) {
+    public void saveUser(User user) {
         try {
             String sql = "INSERT INTO users (name, surname, login, password, role) VALUES (?,?,?,?,?)";
 
@@ -37,7 +37,7 @@ public class UserDAO {
 
     }
 
-    public static User getUserByLogin(String login) {
+    public User getUserByLogin(String login) {
         try {
             String sql = "SELECT * FROM users WHERE login = ?";
 

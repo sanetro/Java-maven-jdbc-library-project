@@ -1,6 +1,8 @@
 package pl.edu.wszib.library.gui;
 
 import java.util.Scanner;
+
+import pl.edu.wszib.library.models.Loan;
 import pl.edu.wszib.library.models.User;
 import pl.edu.wszib.library.database.ProductsDB;
 import pl.edu.wszib.library.models.Product;
@@ -89,6 +91,16 @@ public class GUI {
         book.setAuthor(this.readTextByCalled("Author"));
         book.setDate(this.readTextByCalled("Date (yyyy-mm-dd)"));
         return book;
+    }
+
+    public String readName() {
+        return this.readTextByCalled("Name");
+    }
+    public String readSurname() {
+        return this.readTextByCalled("Surname");
+    }
+    public String readTitle() {
+        return this.readTextByCalled("Title");
     }
 
 

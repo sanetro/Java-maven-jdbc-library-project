@@ -67,18 +67,14 @@ public class Core {
                         case "2": // List all books
                             this.gui.layoutBooks();
                             this.authenticator.showBookList();
-                            /*System.out.println(
-                                    this.authenticator.checkProduct(
-                                            this.gui.readId(),
-                                            this.gui.readQuantity()
-                                    ));*/
                             break;
 
-                        case "3": // Increase product quantity
+                        case "3": // Order book
                             System.out.println(
-                                    this.authenticator.magazineManager(
-                                        this.gui.readId(),this.gui.readQuantity()
-                                    ));
+                                    this.authenticator.orderBookValidator(
+                                            this.gui.readName(),
+                                            this.gui.readSurname(),
+                                            this.gui.readTitle()));
                             break;
 
                         case "4": // Give user admin permission

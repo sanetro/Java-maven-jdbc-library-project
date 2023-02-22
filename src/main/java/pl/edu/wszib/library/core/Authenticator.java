@@ -2,6 +2,7 @@ package pl.edu.wszib.library.core;
 
 import org.apache.commons.codec.digest.DigestUtils;
 import pl.edu.wszib.library.DAO.BookDAO;
+import pl.edu.wszib.library.DAO.LoanDAO;
 import pl.edu.wszib.library.DAO.UserDAO;
 import pl.edu.wszib.library.database.ProductsDB;
 import pl.edu.wszib.library.models.Book;
@@ -17,6 +18,7 @@ public class Authenticator {
 
     final UserDAO userDAO = UserDAO.getInstance();
     final BookDAO bookDAO = BookDAO.getInstance();
+    final LoanDAO loanDAO = LoanDAO.getInstance();
 
     final ProductsDB productsDB = ProductsDB.getInstance();
 
@@ -86,6 +88,20 @@ public class Authenticator {
 
     public void showBookList() {
         this.bookDAO.arrayLayout(this.bookDAO.getAllBooks());
+    }
+
+
+    public String orderBookValidator(String name, String surname, String title) {
+        if (name.equals("") || surname.equals("") || title.equals("")) {
+            return "Values aren't in specific format or are blank";
+        } else {
+            if (this.loanDAO.saveLoan(name, surname, title)) {
+                return "Loan save successful.";
+            }
+            else {
+                return "Loan save failed.";
+            }
+        }
     }
 
     public String checkProduct(int orderedId, int orderedQuantity) {
@@ -161,4 +177,5 @@ public class Authenticator {
     public String getSeed() {
         return seed;
     }
+
 }

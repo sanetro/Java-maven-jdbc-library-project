@@ -13,7 +13,7 @@ public class UserDAO {
     private ArrayList<User> users =  new ArrayList<>();
     private static final UserDAO instance = new UserDAO();
     private static final ConnectionDAO conn = ConnectionDAO.getInstance();
-    private static Connection connection = conn.connect();
+    private static final Connection connection = conn.connect();
 
     private UserDAO() {
     }

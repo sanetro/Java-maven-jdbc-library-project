@@ -1,5 +1,6 @@
 package pl.edu.wszib.library.DAO;
 
+import pl.edu.wszib.library.gui.GUI;
 import pl.edu.wszib.library.models.Book;
 import pl.edu.wszib.library.models.Role;
 import pl.edu.wszib.library.models.User;
@@ -14,7 +15,7 @@ import java.util.List;
 public class BookDAO {
     private static final BookDAO instance = new BookDAO();
     private static final ConnectionDAO conn = ConnectionDAO.getInstance();
-    private static Connection connection = conn.connect();
+    private static final Connection connection = conn.connect();
 
     public void addBook(Book book) {
         try {
@@ -34,9 +35,7 @@ public class BookDAO {
     }
 
 
-    public static BookDAO getInstance() {
-        return instance;
-    }
+
 
     public boolean searchExistsBook(Book book) {
         try {
@@ -81,4 +80,9 @@ public class BookDAO {
             System.out.println("List is empty");
         }
     }
+
+    public static BookDAO getInstance() {
+        return instance;
+    }
+
 }

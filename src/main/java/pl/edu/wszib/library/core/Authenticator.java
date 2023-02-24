@@ -89,8 +89,8 @@ public class Authenticator {
 
     }
 
-    public void showBookList() {
-        this.bookDAO.arrayLayout(this.bookDAO.getAllBooks());
+    public List<Book> showBookList() {
+        return this.bookDAO.getAllBooks();
     }
 
 

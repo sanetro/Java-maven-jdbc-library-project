@@ -65,8 +65,7 @@ public class Core {
                             break;
 
                         case "2": // List all books
-                            this.gui.layoutBooks();
-                            this.authenticator.showBookList();
+                            this.gui.layoutBooks(this.authenticator.showBookList());
                             break;
 
                         case "3": // Order book

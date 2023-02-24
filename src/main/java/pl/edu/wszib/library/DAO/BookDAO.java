@@ -86,13 +86,7 @@ public class BookDAO {
         return result;
     }
 
-    public void arrayLayout(List<Book> books) {
-        try {
-            books.forEach(System.out::println);
-        } catch (Exception e) {
-            System.out.println("List is empty");
-        }
-    }
+
 
     public static BookDAO getInstance() {
         return instance;

@@ -1,5 +1,7 @@
 package pl.edu.wszib.library.gui;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 import pl.edu.wszib.library.models.Loan;
@@ -53,9 +55,15 @@ public class GUI {
         return scanner.nextInt();
     }
 
-    public void layoutBooks() {
-        System.out.println("ISBN\t\tTITLE\t\tAUTHOR\t\tNAME");
-        System.out.println("--------------------------------------------------------------------------");
+    public void layoutBooks(List<Book> books) {
+        String line = "";
+        System.out.printf("%-25s%-40s%30s%20s\n", "ISBN", "TITLE", "AUTHOR", "DATE");
+        for (int i = 0; i < 115; i++) line += "-"; System.out.println(line);
+        for (Book book : books) System.out.printf("%-25s%-40s%30s%20s\n",
+                book.getIsbn(),
+                book.getTitle(),
+                book.getAuthor(),
+                book.getDate());
     }
 
     public String readPlate() {

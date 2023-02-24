@@ -6,6 +6,7 @@ import pl.edu.wszib.library.DAO.LoanDAO;
 import pl.edu.wszib.library.DAO.UserDAO;
 import pl.edu.wszib.library.database.ProductsDB;
 import pl.edu.wszib.library.models.Book;
+import pl.edu.wszib.library.models.Loan;
 import pl.edu.wszib.library.models.Role;
 import pl.edu.wszib.library.models.User;
 
@@ -93,34 +94,51 @@ public class Authenticator {
     }
 
 
-    public String orderBookValidator(String name, String surname, String title) {
-        if (name.equals("") || surname.equals("") || title.equals(""))
-        {
+    public String orderBookValidator(String name, String surname, String title, String action) {
+
+        if (name.equals("") || surname.equals("") || title.equals("")) {
             return "Values aren't in specific format or are blank";
         }
-        else
-        {
-            if (this.userDAO.getSessionUser().getName().equals(name) &&
-                    this.userDAO.getSessionUser().getSurname().equals(surname))
-            {
-                Book givenBook = this.bookDAO.getAllBooks().stream()
-                        .filter(book -> book.getTitle().equals(title))
-                        .findFirst()
-                        .orElse(null);
 
-                if (givenBook == null) return "Book not found";
-
-                if (this.loanDAO.saveLoan(this.userDAO.getSessionUser(), givenBook))
-                {
-                    return "Loan save successful.";
-                }
-            }
-            else
-            {
-                return "Authentication failed.";
-            }
-            return "Loan save failed.";
+        if (!this.userDAO.getSessionUser().getName().equals(name) &&
+                !this.userDAO.getSessionUser().getSurname().equals(surname)) {
+            return "Authentication failed.";
         }
+
+        Book givenBook = this.bookDAO.getAllBooks().stream()
+                .filter(book -> book.getTitle().equals(title))
+                .findFirst()
+                .orElse(null);
+
+        if (givenBook == null) {
+            return "Book not found";
+        }
+
+        if (action == "addLoan") {
+            if (this.loanDAO.saveLoan(this.userDAO.getSessionUser(), givenBook)) {
+                return "Loan save successful.";
+            }
+        }
+
+        // In filter. Trying to get bookId in loan by title
+        // So If given title is in book return isbn
+        // Than if isbn is identical to bookId this is right loan who wants to give back book who ordered previously
+        if (action == "deleteLoan") {
+            Loan loanist = this.loanDAO.getLoans().stream()
+                    .filter(loan -> loan.getBookId().equals(givenBook.getIsbnFromTitle(title)))
+                    .findFirst()
+                    .orElse(null);
+
+            if (loanist == null) {
+                return "Insert book which you ordered";
+            }
+
+            if (this.loanDAO.deleteLoan(this.userDAO.getSessionUser(), loanist)) {
+                return "Loan removed successful.";
+            }
+        }
+        return "Loan save failed.";
+
     }
 
     public String checkProduct(int orderedId, int orderedQuantity) {
@@ -147,13 +165,12 @@ public class Authenticator {
     }
 
     public String UserToAdmin(String login) {
-        String result = switch (userDAO.checkRoleToAdmin(login)) {
+        return switch (userDAO.checkRoleToAdmin(login)) {
             case "0" -> "Admin role deploy";
             case "1" -> "User already has admin privileges";
             case "2" -> "Couldn't find user";
             default -> "Undefined error";
         };
-        return result;
     }
 
     public String magazineManager(int givenId, int addValue) {

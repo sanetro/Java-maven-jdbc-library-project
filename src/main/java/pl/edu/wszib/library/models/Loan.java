@@ -1,19 +1,19 @@
 package pl.edu.wszib.library.models;
 
-import java.text.DateFormat;
+import java.util.Date;
 
 public class Loan {
 
     private int id;
     private int userid;
     private String bookId; // isbn
-    private DateFormat orderDate;
-    private DateFormat deadlineDate;
+    private Date orderDate;
+    private Date deadlineDate;
 
     public Loan() {
     }
 
-    public Loan(int id, int userId, String bookId, DateFormat orderDate, DateFormat deadlineDate) {
+    public Loan(int id, int userId, String bookId, Date orderDate, Date deadlineDate) {
         this.id = id;
         this.userid = userId;
         this.bookId = bookId;
@@ -29,11 +29,11 @@ public class Loan {
         this.id = id;
     }
 
-    public DateFormat getDeadlineDate() {
+    public Date getDeadlineDate() {
         return deadlineDate;
     }
 
-    public DateFormat getOrderDate() {
+    public Date getOrderDate() {
         return orderDate;
     }
 
@@ -49,11 +49,11 @@ public class Loan {
         this.bookId = bookId;
     }
 
-    public void setDeadlineDate(DateFormat deadlineDate) {
+    public void setDeadlineDate(Date deadlineDate) {
         this.deadlineDate = deadlineDate;
     }
 
-    public void setOrderDate(DateFormat orderDate) {
+    public void setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
     }
 

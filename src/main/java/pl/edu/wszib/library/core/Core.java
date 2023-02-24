@@ -74,10 +74,20 @@ public class Core {
                                     this.authenticator.orderBookValidator(
                                             this.gui.readName(),
                                             this.gui.readSurname(),
-                                            this.gui.readTitle()));
+                                            this.gui.readTitle(),
+                                            "addLoan"));
                             break;
 
-                        case "4": // Give user admin permission
+                        case "4": // Give book back
+                            System.out.println(
+                                    this.authenticator.orderBookValidator(
+                                            this.gui.readName(),
+                                            this.gui.readSurname(),
+                                            this.gui.readTitle(),
+                                            "deleteLoan"));
+                            break;
+
+                        case "23": // Give user admin permission
                             System.out.println(
                                     this.authenticator.UserToAdmin(
                                             this.gui.readTextByCalled("Login")));

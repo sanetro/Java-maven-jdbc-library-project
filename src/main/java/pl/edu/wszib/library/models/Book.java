@@ -59,4 +59,8 @@ public class Book {
         sb.append(date);
         return sb.toString();
     }
+
+    public Object getIsbnFromTitle(String title) {
+        return this.isbn;
+    }
 }

@@ -93,14 +93,12 @@ public class GUI {
         return book;
     }
 
-    public String readName() {
-        return this.readTextByCalled("Name");
-    }
+    public String readName() { return this.readTextByCalled("Your Name"); }
     public String readSurname() {
-        return this.readTextByCalled("Surname");
+        return this.readTextByCalled("Your Surname");
     }
     public String readTitle() {
-        return this.readTextByCalled("Title");
+        return this.readTextByCalled("Title of book");
     }
 
 

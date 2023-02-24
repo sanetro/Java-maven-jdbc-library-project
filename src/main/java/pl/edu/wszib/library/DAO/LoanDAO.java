@@ -6,34 +6,34 @@ import pl.edu.wszib.library.models.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class LoanDAO {
     private static final LoanDAO instance = new LoanDAO();
-    private ArrayList<Loan> loans;
     private static final ConnectionProvider conn = ConnectionProvider.getInstance();
     private static final Connection connection = conn.connect();
-    private static final BookDAO bookDAO = BookDAO.getInstance();
-    private static final UserDAO userDAO = UserDAO.getInstance();
 
     public LoanDAO () {
 
     }
 
     public boolean saveLoan(User user, Book book) {
-        String sql;
         try {
-
-            sql = "INSERT INTO loans (userid, bookid, orderdate, deadlinedate) VALUES (?,?,?,?)";
-
+            String sql = "INSERT INTO loans (userid, bookid, orderdate, deadlinedate) VALUES (?,?,?,?)";
 
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setInt(1, user.getId());
             ps.setString(2, book.getIsbn());
-            ps.setString(3, "2020-01-01");
-            ps.setString(4, "2000-02-02");
+            ps.setString(3, String.valueOf(LocalDate.now()));
+            ps.setString(4, String.valueOf(LocalDate.now().plusDays(14)));
 
             ps.executeUpdate();
             return true;
@@ -42,6 +42,46 @@ public class LoanDAO {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean deleteLoan(User user, Loan loanist) {
+        try {
+
+            String sql = "DELETE FROM loans WHERE userid = ? AND bookid = ?";
+
+
+            PreparedStatement ps = connection.prepareStatement(sql);
+
+            ps.setInt(1, user.getId());
+            ps.setString(2, loanist.getBookId());
+
+            ps.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            return false;
+        }
+    }
+    public ArrayList<Loan> getLoans() {
+        ArrayList<Loan> result = new ArrayList<>();
+        try {
+            String sql = "SELECT * FROM loans";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()){
+                result.add(new Loan(
+                        rs.getInt("id"),
+                        rs.getInt("userid"),
+                        rs.getString("bookid"),
+                        rs.getDate("orderdate"),
+                        rs.getDate("deadlinedate")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+
 
     public static LoanDAO getInstance() {
         return instance;

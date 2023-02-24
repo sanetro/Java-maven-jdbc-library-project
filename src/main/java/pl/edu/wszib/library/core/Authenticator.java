@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class Authenticator {
 
@@ -92,19 +94,23 @@ public class Authenticator {
 
 
     public String orderBookValidator(String name, String surname, String title) {
-        List<Book> books = bookDAO.getAllBooks();
-        List<User> users = userDAO.getAllUsers();
         if (name.equals("") || surname.equals("") || title.equals(""))
         {
             return "Values aren't in specific format or are blank";
         }
         else
         {
-            if (this.bookDAO.searchBookByTitle(title) &&
-                    this.userDAO.getSessionUser().getName().equals(name) &&
+            if (this.userDAO.getSessionUser().getName().equals(name) &&
                     this.userDAO.getSessionUser().getSurname().equals(surname))
             {
-                if (this.loanDAO.saveLoan(name, surname, title))
+                Book givenBook = this.bookDAO.getAllBooks().stream()
+                        .filter(book -> book.getTitle().equals(title))
+                        .findFirst()
+                        .orElse(null);
+
+                if (givenBook == null) return "Book not found";
+
+                if (this.loanDAO.saveLoan(this.userDAO.getSessionUser(), givenBook))
                 {
                     return "Loan save successful.";
                 }
@@ -141,21 +147,12 @@ public class Authenticator {
     }
 
     public String UserToAdmin(String login) {
-        String result;
-        switch (userDAO.checkRoleToAdmin(login)) {
-            case "0":
-                result = "Admin role deploy";
-                break;
-            case "1":
-                result = "User already has admin privileges";
-                break;
-            case "2":
-                result = "Couldn't find user";
-                break;
-            default:
-                result = "Undefined error";
-                break;
-        }
+        String result = switch (userDAO.checkRoleToAdmin(login)) {
+            case "0" -> "Admin role deploy";
+            case "1" -> "User already has admin privileges";
+            case "2" -> "Couldn't find user";
+            default -> "Undefined error";
+        };
         return result;
     }
 

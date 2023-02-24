@@ -3,15 +3,15 @@ package pl.edu.wszib.library.DAO;
 import java.sql.*;
 import java.sql.Connection;
 
-public class ConnectionDAO {
+public class ConnectionProvider {
     private static final String url = "jdbc:mysql://localhost:3306/librarydb";
 
     private static final String user = "root";
     private static final String password = "";
     public static Connection conn;
-    private static final ConnectionDAO instance = new ConnectionDAO();
+    private static final ConnectionProvider instance = new ConnectionProvider();
 
-    public ConnectionDAO () {
+    public ConnectionProvider() {
     }
 
     public Connection connect() {
@@ -34,7 +34,7 @@ public class ConnectionDAO {
 
 
 
-    public static ConnectionDAO getInstance() { return instance; }
+    public static ConnectionProvider getInstance() { return instance; }
 
 
 }

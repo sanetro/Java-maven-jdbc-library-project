@@ -1,9 +1,6 @@
 package pl.edu.wszib.library.DAO;
 
-import pl.edu.wszib.library.gui.GUI;
 import pl.edu.wszib.library.models.Book;
-import pl.edu.wszib.library.models.Role;
-import pl.edu.wszib.library.models.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +11,7 @@ import java.util.List;
 
 public class BookDAO {
     private static final BookDAO instance = new BookDAO();
-    private static final ConnectionDAO conn = ConnectionDAO.getInstance();
+    private static final ConnectionProvider conn = ConnectionProvider.getInstance();
     private static final Connection connection = conn.connect();
 
     public void addBook(Book book) {

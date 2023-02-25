@@ -1,4 +1,4 @@
-package pl.edu.wszib.library.DAO;
+package pl.edu.wszib.library.core;
 
 import java.sql.*;
 import java.sql.Connection;

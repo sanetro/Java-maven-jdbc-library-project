@@ -126,7 +126,9 @@ public class Authenticator {
         // Than if isbn is identical to bookId this is right loan who wants to give back book who ordered previously
         if (action == "deleteLoan") {
             Loan loanist = this.loanDAO.getLoans().stream()
-                    .filter(loan -> loan.getBookId().equals(givenBook.getIsbnFromTitle(title)))
+                    .filter(loan -> loan.getBookId().equals(givenBook.getIsbnFromTitle(title)) &&
+                            loan.getReturnDate() != null &&
+                            loan.getUserid() == this.userDAO.getSessionUser().getId())
                     .findFirst()
                     .orElse(null);
 

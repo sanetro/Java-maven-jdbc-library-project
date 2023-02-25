@@ -1,5 +1,6 @@
 package pl.edu.wszib.library.DAO;
 
+import pl.edu.wszib.library.core.ConnectionProvider;
 import pl.edu.wszib.library.models.Book;
 
 import java.sql.Connection;

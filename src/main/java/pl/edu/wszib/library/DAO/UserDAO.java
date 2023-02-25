@@ -1,6 +1,7 @@
 package pl.edu.wszib.library.DAO;
 
 
+import pl.edu.wszib.library.core.ConnectionProvider;
 import pl.edu.wszib.library.models.Role;
 import pl.edu.wszib.library.models.User;
 

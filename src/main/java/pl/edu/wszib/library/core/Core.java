@@ -54,8 +54,10 @@ public class Core {
                         case "1" -> // Add book
                                 System.out.println(
                                         this.authenticator.addBookAgent(this.gui.readAddBookFields()));
+
                         case "2" -> // List all books
                                 this.gui.layoutBooks(this.authenticator.showBookList());
+
                         case "3" -> // Order book
                                 System.out.println(
                                         this.authenticator.orderBookValidator(
@@ -63,6 +65,7 @@ public class Core {
                                                 this.gui.readSurname(),
                                                 this.gui.readTitle(),
                                                 "addLoan"));
+
                         case "4" -> // Return Book
                                 System.out.println(
                                         this.authenticator.orderBookValidator(
@@ -70,16 +73,20 @@ public class Core {
                                                 this.gui.readSurname(),
                                                 this.gui.readTitle(),
                                                 "deleteLoan"));
+
                         case "5" -> // Show List of loans with user information
                                 this.gui.layoutOrderedBooksExtended(
                                         this.authenticator.showBookListAndUser());
+
                         case "6" -> // Show List of loans with user information
                                 this.gui.layoutOrderedBooksExtended(
                                         this.authenticator.showBookListAndUserOverTime());
+
                         case "7" -> // Give user admin permission
                                 System.out.println(
                                         this.authenticator.UserToAdmin(
                                                 this.gui.readTextByCalled("Login")));
+
                         case "8" -> { // Logout
                             System.out.println("Logged out");
                             this.authenticator.unmountLoggedUser();

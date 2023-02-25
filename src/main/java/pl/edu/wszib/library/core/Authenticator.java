@@ -5,10 +5,7 @@ import pl.edu.wszib.library.DAO.BookDAO;
 import pl.edu.wszib.library.DAO.LoanDAO;
 import pl.edu.wszib.library.DAO.UserDAO;
 import pl.edu.wszib.library.database.ProductsDB;
-import pl.edu.wszib.library.models.Book;
-import pl.edu.wszib.library.models.Loan;
-import pl.edu.wszib.library.models.Role;
-import pl.edu.wszib.library.models.User;
+import pl.edu.wszib.library.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +88,10 @@ public class Authenticator {
 
     public List<Book> showBookList() {
         return this.bookDAO.getAllBooks();
+    }
+
+    public ArrayList<LoanExtended> showBookListAndUser() {
+        return this.loanDAO.getLoansWithUserInformation();
     }
 
 

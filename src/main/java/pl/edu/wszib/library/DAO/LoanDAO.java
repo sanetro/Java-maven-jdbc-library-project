@@ -2,6 +2,7 @@ package pl.edu.wszib.library.DAO;
 
 import pl.edu.wszib.library.models.Book;
 import pl.edu.wszib.library.models.Loan;
+import pl.edu.wszib.library.models.LoanExtended;
 import pl.edu.wszib.library.models.User;
 
 import java.sql.Connection;
@@ -20,9 +21,7 @@ public class LoanDAO {
     private static final ConnectionProvider conn = ConnectionProvider.getInstance();
     private static final Connection connection = conn.connect();
 
-    public LoanDAO () {
 
-    }
 
     public boolean saveLoan(User user, Book book) {
         try {
@@ -80,6 +79,34 @@ public class LoanDAO {
         }
         return result;
     }
+
+    public ArrayList<LoanExtended> getLoansWithUserInformation() {
+        ArrayList<LoanExtended> result = new ArrayList<>();
+        try {
+            String sql = "SELECT b.isbn, b.title, u.name, u.surname, u.id, l.orderdate, l.deadlinedate " +
+                            "FROM loans as l " +
+                            "INNER JOIN books as b ON l.bookid = b.isbn " +
+                            "INNER JOIN users as u ON l.userid = u.id;";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()) {
+                result.add(new LoanExtended(
+                        rs.getString("isbn"),
+                        rs.getString("title"),
+                        rs.getString("name"),
+                        rs.getString("surname"),
+                        rs.getInt("id"),
+                        rs.getDate("orderdate"),
+                        rs.getDate("deadlinedate")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+
+
 
 
 

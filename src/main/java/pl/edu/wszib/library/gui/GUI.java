@@ -1,14 +1,12 @@
 package pl.edu.wszib.library.gui;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
-import pl.edu.wszib.library.models.Loan;
-import pl.edu.wszib.library.models.User;
+import pl.edu.wszib.library.models.*;
 import pl.edu.wszib.library.database.ProductsDB;
-import pl.edu.wszib.library.models.Product;
-import pl.edu.wszib.library.models.Book;
 
 public class GUI {
     private final Scanner scanner = new Scanner(System.in);
@@ -28,12 +26,13 @@ public class GUI {
     public String showAdminPanel() {
         System.out.println("\n=== Admin Panel ===");
         System.out.println("1. Add book");
-        System.out.println("2. List of all books");
+        System.out.println("2. Show List of all books");
         System.out.println("3. Loan the book");
-        System.out.println("4. List of books");
-        System.out.println("5. List of loans");
-        System.out.println("6. Overdue loanists' list");
-        System.out.println("7. Logout");
+        System.out.println("4. Return book");
+        System.out.println("5. Show List of loans with user information");
+        System.out.println("6. Show List of debt users with user information");
+        System.out.println("7. Give user admin permission");
+        System.out.println("8. Logout");
         return scanner.nextLine();
     }
     public String showUserPanel() {
@@ -64,6 +63,21 @@ public class GUI {
                 book.getTitle(),
                 book.getAuthor(),
                 book.getDate());
+    }
+
+    public void layoutOrderedBooksExtended(ArrayList<LoanExtended> loans) {
+        String line = "";
+        System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s\n",
+                "ISBN", "TITLE", "NAME", "SURNAME", "ID", "ORDERD DATE", "DEADLINE DATE");
+        for (int i = 0; i < 143; i++) line += "-"; System.out.println(line);
+        for (LoanExtended loan: loans) System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s\n",
+                loan.getIsbn(),
+                loan.getTitle(),
+                loan.getName(),
+                loan.getSurname(),
+                loan.getId(),
+                loan.getOrderedDate(),
+                loan.getDeadlineDate());
     }
 
     public String readPlate() {

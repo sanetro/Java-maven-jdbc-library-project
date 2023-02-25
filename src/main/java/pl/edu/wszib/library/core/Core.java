@@ -6,7 +6,7 @@ import pl.edu.wszib.library.models.Role;
 import pl.edu.wszib.library.models.User;
 
 public class Core {
-    final ProductsDB productsDB = ProductsDB.getInstance();
+
     final Authenticator authenticator = Authenticator.getInstance();
     final GUI gui = GUI.getInstance();
     private static final Core instance = new Core();
@@ -23,84 +23,66 @@ public class Core {
         {
             while (!isLogged)
             {
-                switch (this.gui.showMenu())
-                {
-                    case "1":
+                switch (this.gui.showMenu()) {
+                    case "1" -> {
                         this.authenticator.authenticate(this.gui.readLoginAndPassword());
                         isLogged = this.authenticator.getLoggedUser() != null;
                         if (!isLogged) System.out.println("Authentication failed");
-                        break;
-
-                    case "2":
+                    }
+                    case "2" -> {
                         if (this.authenticator.register(this.gui.readRegisterFields()))
                             System.out.println("Successful.");
                         else System.out.println("Authentication failed");
-                        break;
-
-                    case "3":
+                    }
+                    case "3" -> {
                         System.out.println("Bye bye..");
                         this.authenticator.unmountLoggedUser();
-
                         running = false;
                         isLogged = true;
-                        break;
-
-                    default:
-                        System.out.println("Undefined option");
-                        break;
+                    }
+                    default -> System.out.println("Undefined option");
                 }
             }
 
-            if(running == false) break;
+            if(!running) break;
 
             if (this.authenticator.getLoggedUser().getRole() == Role.ADMIN)
             {
                 while (isLogged)
                 {
-                    switch (this.gui.showAdminPanel())
-                    {
-                        case "1": // Add book
-                            System.out.println(
-                                    this.authenticator.addBookAgent(this.gui.readAddBookFields()));
-                            break;
-
-                        case "2": // List all books
-                            this.gui.layoutBooks(this.authenticator.showBookList());
-                            break;
-
-                        case "3": // Order book
-                            System.out.println(
-                                    this.authenticator.orderBookValidator(
-                                            this.gui.readName(),
-                                            this.gui.readSurname(),
-                                            this.gui.readTitle(),
-                                            "addLoan"));
-                            break;
-
-                        case "4": // Give book back
-                            System.out.println(
-                                    this.authenticator.orderBookValidator(
-                                            this.gui.readName(),
-                                            this.gui.readSurname(),
-                                            this.gui.readTitle(),
-                                            "deleteLoan"));
-                            break;
-
-                        case "23": // Give user admin permission
-                            System.out.println(
-                                    this.authenticator.UserToAdmin(
-                                            this.gui.readTextByCalled("Login")));
-                            break;
-
-                        case "7": // Logout
-                            System.out.println("Wylogowano");
+                    switch (this.gui.showAdminPanel()) {
+                        case "1" -> // Add book
+                                System.out.println(
+                                        this.authenticator.addBookAgent(this.gui.readAddBookFields()));
+                        case "2" -> // List all books
+                                this.gui.layoutBooks(this.authenticator.showBookList());
+                        case "3" -> // Order book
+                                System.out.println(
+                                        this.authenticator.orderBookValidator(
+                                                this.gui.readName(),
+                                                this.gui.readSurname(),
+                                                this.gui.readTitle(),
+                                                "addLoan"));
+                        case "4" -> // Return Book
+                                System.out.println(
+                                        this.authenticator.orderBookValidator(
+                                                this.gui.readName(),
+                                                this.gui.readSurname(),
+                                                this.gui.readTitle(),
+                                                "deleteLoan"));
+                        case "5" -> // Show List of loans with user information
+                                this.gui.layoutOrderedBooksExtended(
+                                        this.authenticator.showBookListAndUser());
+                        case "7" -> // Give user admin permission
+                                System.out.println(
+                                        this.authenticator.UserToAdmin(
+                                                this.gui.readTextByCalled("Login")));
+                        case "8" -> { // Logout
+                            System.out.println("Logged out");
                             this.authenticator.unmountLoggedUser();
                             isLogged = false;
-                            break;
-
-                        default:
-                            System.out.println("Nie ma takiej opcji");
-                            break;
+                        }
+                        default -> System.out.println("Undefined option!");
                     }
                 }
             }
@@ -134,7 +116,7 @@ public class Core {
                     }
                 }
             }
-            else System.out.println("Nieznana rola! Nie wybrano panelu.");
+            else System.out.println("Undefined Role. Can not find interface.");
         }
     }
     public static Core getInstance() {

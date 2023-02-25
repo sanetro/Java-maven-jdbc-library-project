@@ -91,8 +91,18 @@ public class Core {
                         case "8" -> { // Search book and check available
                             switch (this.gui.showOptionsSearchBook()) {
                                 case "1" -> this.gui.showExtendedBookInfo(
-                                        this.loanDAO.getLoansWithUserInformationByISBN(
-                                            this.gui.readISBN()));
+                                        this.loanDAO.getLoansWithUserInformationByOption("1",
+                                                this.authenticator.isBlank(this.gui.readISBN())));
+                                case "2" -> this.gui.showExtendedBookInfo(
+                                        this.loanDAO.getLoansWithUserInformationByOption("2",
+                                                this.authenticator.isBlank(this.gui.readTitle())));
+                                case "3" -> this.gui.showExtendedBookInfo(
+                                        this.loanDAO.getLoansWithUserInformationByOption("3",
+                                                this.authenticator.isBlank(this.gui.readAuthor())));
+                                case "4" -> this.gui.showExtendedBookInfo(
+                                        this.loanDAO.getLoansWithUserInformationByOption("4",
+                                                this.authenticator.isBlank(this.gui.readDate())));
+                                default -> System.out.println("Undefined option");
                             }
                         }
                         case "9" -> { // Logout

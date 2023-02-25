@@ -131,18 +131,18 @@ public class GUI {
 
     public void showExtendedBookInfo(ArrayList<LoanExtended> loans) {
         try {
-            System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s\n",
-                    "ISBN", "TITLE", "AUTHOR", "DATE", "USER NAME", "USER SURNAME", "RETURN DATE");
+            System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
+                    "ISBN", "TITLE", "AUTHOR", "NAME & SURNAME", "USER ID", "ORDERED DATE", "DEADLINE DATE", "RETURNED DATE");
             headline(163);
             for (LoanExtended loan : loans)
-                System.out.printf("\n%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
+                System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
                         loan.getIsbn(),
                         loan.getTitle(),
                         loan.getAuthor(),
-                        loan.getSurname(),
-                        loan.getId(),
-                        loan.getOrderedDate(),
-                        loan.getDeadlineDate(),
+                        loan.getReturnDate() == null ? loan.getName() + " " + loan.getSurname(): "",
+                        loan.getReturnDate() == null ? loan.getId(): "",
+                        loan.getReturnDate() == null ? loan.getOrderedDate(): "",
+                        loan.getReturnDate() == null ? loan.getDeadlineDate(): "",
                         loan.getReturnDate() == null ? "Not returned" : loan.getReturnDate());
         } catch (Exception e) {
             System.out.println("No records");

@@ -127,17 +127,39 @@ public class LoanDAO {
         return result;
     }
 
-    public ArrayList<LoanExtended> getLoansWithUserInformationByISBN(String isbn) {
+    public ArrayList<LoanExtended> getLoansWithUserInformationByOption(String option, String value) {
         ArrayList<LoanExtended> result = new ArrayList<>();
+
         try {
-            String sql = "SELECT b.isbn, b.title, b.author, b.date, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate " +
-                    "FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id " +
-                    "HAVING b.isbn LIKE CONCAT( '%',?,'%')";
+            String sql = null;
+            switch (option) {
+                case "1" -> {
+                    sql = "SELECT b.isbn, b.title, b.author, b.date, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate " +
+                            "FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id " +
+                            "HAVING b.isbn LIKE CONCAT( '%',?,'%')";
+                }
+                case "2" -> {
+                    sql = "SELECT b.isbn, b.title, b.author, b.date, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate " +
+                            "FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id " +
+                            "HAVING b.title LIKE CONCAT( '%',?,'%')";
+                }
+                case "3" -> {
+                    sql = "SELECT b.isbn, b.title, b.author, b.date, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate " +
+                            "FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id " +
+                            "HAVING b.author LIKE CONCAT( '%',?,'%')";
+                }
+                case "4" -> {
+                    sql = "SELECT b.isbn, b.title, b.author, b.date, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate " +
+                            "FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id " +
+                            "HAVING b.date LIKE CONCAT( '%',?,'%')";
+                }
+            }
+            
 
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, isbn);
-            ResultSet rs = ps.executeQuery();
+            ps.setString(1, value);
             System.out.println(ps);
+            ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 result.add(new LoanExtended(
                         rs.getString("isbn"),
@@ -156,6 +178,8 @@ public class LoanDAO {
         }
         return result;
     }
+
+
 
 
 

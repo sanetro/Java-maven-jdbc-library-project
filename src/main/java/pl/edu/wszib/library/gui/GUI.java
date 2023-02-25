@@ -1,7 +1,6 @@
 package pl.edu.wszib.library.gui;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -32,7 +31,8 @@ public class GUI {
         System.out.println("5. Show List of loans with user information");
         System.out.println("6. Show List of debt users with user information");
         System.out.println("7. Give user admin permission");
-        System.out.println("8. Logout");
+        System.out.println("8. Search book and check available");
+        System.out.println("9. Logout");
         return scanner.nextLine();
     }
     public String showUserPanel() {
@@ -41,6 +41,15 @@ public class GUI {
         System.out.println("2. Loan the book");
         System.out.println("3. List of books");
         System.out.println("4. Logout");
+        return scanner.nextLine();
+    }
+
+    public String showOptionsSearchBook() {
+        System.out.println("\n=== Search Book by ===");
+        System.out.println("1. ISBN");
+        System.out.println("2. Title");
+        System.out.println("3. Author");
+        System.out.println("4. Date");
         return scanner.nextLine();
     }
 
@@ -55,9 +64,8 @@ public class GUI {
     }
 
     public void layoutBooks(List<Book> books) {
-        String line = "";
         System.out.printf("%-25s%-40s%30s%20s\n", "ISBN", "TITLE", "AUTHOR", "DATE");
-        for (int i = 0; i < 115; i++) line += "-"; System.out.println(line);
+        headline(115);
         for (Book book : books) System.out.printf("%-25s%-40s%30s%20s\n",
                 book.getIsbn(),
                 book.getTitle(),
@@ -66,10 +74,9 @@ public class GUI {
     }
 
     public void layoutOrderedBooksExtended(ArrayList<LoanExtended> loans) {
-        String line = "";
         System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
                 "ISBN", "TITLE", "USER NAME", "USER  SURNAME", "USER ID", "ORDERD DATE", "DEADLINE DATE", "RETURN DATE");
-        for (int i = 0; i < 163; i++) line += "-"; System.out.println(line);
+        headline(163);
         for (LoanExtended loan: loans) System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
                 loan.getIsbn(),
                 loan.getTitle(),
@@ -107,13 +114,39 @@ public class GUI {
         return user;
     }
 
-    public Book readAddBookFields() {
+    public Book readBookFields() {
         Book book = new Book();
         book.setIsbn(this.readTextByCalled("ISBN"));
         book.setTitle(this.readTextByCalled("Title"));
         book.setAuthor(this.readTextByCalled("Author"));
         book.setDate(this.readTextByCalled("Date (yyyy-mm-dd)"));
         return book;
+    }
+
+    private void headline(int n) {
+        System.out.println();
+        for (int i = 0; i < n; i++) System.out.print("-");
+        System.out.println();
+    }
+
+    public void showExtendedBookInfo(ArrayList<LoanExtended> loans) {
+        try {
+            System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s\n",
+                    "ISBN", "TITLE", "AUTHOR", "DATE", "USER NAME", "USER SURNAME", "RETURN DATE");
+            headline(163);
+            for (LoanExtended loan : loans)
+                System.out.printf("\n%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
+                        loan.getIsbn(),
+                        loan.getTitle(),
+                        loan.getAuthor(),
+                        loan.getSurname(),
+                        loan.getId(),
+                        loan.getOrderedDate(),
+                        loan.getDeadlineDate(),
+                        loan.getReturnDate() == null ? "Not returned" : loan.getReturnDate());
+        } catch (Exception e) {
+            System.out.println("No records");
+        }
     }
 
     public String readName() { return this.readTextByCalled("Your Name"); }
@@ -123,9 +156,20 @@ public class GUI {
     public String readTitle() {
         return this.readTextByCalled("Title of book");
     }
+    public String readISBN() {
+        return this.readTextByCalled("ISBN of book");
+    }
+    public String readDate() {
+        return this.readTextByCalled("Date of book");
+    }
+    public String readAuthor() {
+        return this.readTextByCalled("Author of book");
+    }
 
 
     public static GUI getInstance() {
         return instance;
     }
+
+
 }

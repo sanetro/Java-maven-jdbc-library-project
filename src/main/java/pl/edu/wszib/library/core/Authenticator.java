@@ -195,6 +195,18 @@ public class Authenticator {
         }
     }
 
+    public LoanExtended optionalInputValidate(Book bookToSearch) {
+        if (bookToSearch.getIsbn().equals("") &&
+                bookToSearch.getTitle().equals("") &&
+                bookToSearch.getTitle().equals("") &&
+                bookToSearch.getDate().equals("")) {
+            return null;
+        }
+        //this.loanDAO.getLoansWithUserInformationByTag()
+
+        return null;
+    }
+
     public static Authenticator getInstance() {
         return instance;
     }
@@ -207,5 +219,6 @@ public class Authenticator {
     public String getSeed() {
         return seed;
     }
+
 
 }

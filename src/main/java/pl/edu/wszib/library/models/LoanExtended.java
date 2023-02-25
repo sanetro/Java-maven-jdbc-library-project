@@ -5,6 +5,8 @@ import java.util.Date;
 public class LoanExtended {
     private String isbn;
     private String title;
+    private String author;
+    private Date date;
     private  String name;
     private  String surname;
     private int id;
@@ -15,9 +17,11 @@ public class LoanExtended {
     public LoanExtended() {
     }
 
-    public LoanExtended(String isbn, String title, String name, String surname, int id, Date orderedDate, Date deadlineDate, Date returnDate) {
+    public LoanExtended(String isbn, String title, String author, Date date, String name, String surname, int id, Date orderedDate, Date deadlineDate, Date returnDate) {
         this.isbn = isbn;
         this.title = title;
+        this.author = author;
+        this.date = date;
         this.name = name;
         this.surname = surname;
         this.id = id;
@@ -83,6 +87,22 @@ public class LoanExtended {
     }
 
     public Date getReturnDate() { return returnDate; }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     public void setReturnDate(Date returnDate) { this.returnDate = returnDate; }
 }

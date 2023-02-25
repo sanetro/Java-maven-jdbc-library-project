@@ -1,13 +1,14 @@
 package pl.edu.wszib.library.core;
 
-import pl.edu.wszib.library.database.ProductsDB;
+import pl.edu.wszib.library.DAO.LoanDAO;
 import pl.edu.wszib.library.gui.GUI;
 import pl.edu.wszib.library.models.Role;
-import pl.edu.wszib.library.models.User;
+
 
 public class Core {
 
     final Authenticator authenticator = Authenticator.getInstance();
+    final LoanDAO loanDAO = LoanDAO.getInstance();
     final GUI gui = GUI.getInstance();
     private static final Core instance = new Core();
 
@@ -53,7 +54,7 @@ public class Core {
                     switch (this.gui.showAdminPanel()) {
                         case "1" -> // Add book
                                 System.out.println(
-                                        this.authenticator.addBookAgent(this.gui.readAddBookFields()));
+                                        this.authenticator.addBookAgent(this.gui.readBookFields()));
 
                         case "2" -> // List all books
                                 this.gui.layoutBooks(this.authenticator.showBookList());
@@ -87,7 +88,14 @@ public class Core {
                                         this.authenticator.UserToAdmin(
                                                 this.gui.readTextByCalled("Login")));
 
-                        case "8" -> { // Logout
+                        case "8" -> { // Search book and check available
+                            switch (this.gui.showOptionsSearchBook()) {
+                                case "1" -> this.gui.showExtendedBookInfo(
+                                        this.loanDAO.getLoansWithUserInformationByISBN(
+                                            this.gui.readISBN()));
+                            }
+                        }
+                        case "9" -> { // Logout
                             System.out.println("Logged out");
                             this.authenticator.unmountLoggedUser();
                             isLogged = false;

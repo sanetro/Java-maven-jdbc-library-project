@@ -87,6 +87,8 @@ public class LoanDAO {
                 result.add(new LoanExtended(
                         rs.getString("isbn"),
                         rs.getString("title"),
+                        null,
+                        null,
                         rs.getString("name"),
                         rs.getString("surname"),
                         rs.getInt("id"),
@@ -110,6 +112,8 @@ public class LoanDAO {
                 result.add(new LoanExtended(
                         rs.getString("isbn"),
                         rs.getString("title"),
+                        null,
+                        null,
                         rs.getString("name"),
                         rs.getString("surname"),
                         rs.getInt("id"),
@@ -123,13 +127,42 @@ public class LoanDAO {
         return result;
     }
 
+    public ArrayList<LoanExtended> getLoansWithUserInformationByISBN(String isbn) {
+        ArrayList<LoanExtended> result = new ArrayList<>();
+        try {
+            String sql = "SELECT b.isbn, b.title, b.author, b.date, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate " +
+                    "FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id " +
+                    "HAVING b.isbn LIKE CONCAT( '%',?,'%')";
 
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, isbn);
+            ResultSet rs = ps.executeQuery();
+            System.out.println(ps);
+            while(rs.next()) {
+                result.add(new LoanExtended(
+                        rs.getString("isbn"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getDate("date"),
+                        rs.getString("name"),
+                        rs.getString("surname"),
+                        rs.getInt("id"),
+                        rs.getDate("orderdate"),
+                        rs.getDate("deadlinedate"),
+                        rs.getDate("returndate")));
+            }
+        } catch (SQLException e) {
+           throw new RuntimeException(e);
+        }
+        return result;
+    }
 
 
 
     public static LoanDAO getInstance() {
         return instance;
     }
+
 
 
 }

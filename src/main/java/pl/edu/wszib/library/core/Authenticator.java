@@ -94,6 +94,10 @@ public class Authenticator {
         return this.loanDAO.getLoansWithUserInformation();
     }
 
+    public ArrayList<LoanExtended> showBookListAndUserOverTime() {
+        return this.loanDAO.getLoansWithUserInformationOverTime();
+    }
+
 
     public String orderBookValidator(String name, String surname, String title, String action) {
 

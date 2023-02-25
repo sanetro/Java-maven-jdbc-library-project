@@ -73,6 +73,9 @@ public class Core {
                         case "5" -> // Show List of loans with user information
                                 this.gui.layoutOrderedBooksExtended(
                                         this.authenticator.showBookListAndUser());
+                        case "6" -> // Show List of loans with user information
+                                this.gui.layoutOrderedBooksExtended(
+                                        this.authenticator.showBookListAndUserOverTime());
                         case "7" -> // Give user admin permission
                                 System.out.println(
                                         this.authenticator.UserToAdmin(

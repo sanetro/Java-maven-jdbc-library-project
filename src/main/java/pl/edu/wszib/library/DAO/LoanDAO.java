@@ -83,10 +83,29 @@ public class LoanDAO {
     public ArrayList<LoanExtended> getLoansWithUserInformation() {
         ArrayList<LoanExtended> result = new ArrayList<>();
         try {
-            String sql = "SELECT b.isbn, b.title, u.name, u.surname, u.id, l.orderdate, l.deadlinedate " +
-                            "FROM loans as l " +
-                            "INNER JOIN books as b ON l.bookid = b.isbn " +
-                            "INNER JOIN users as u ON l.userid = u.id;";
+            String sql = "SELECT b.isbn, b.title, u.name, u.surname, u.id, l.orderdate, l.deadlinedate FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            ResultSet rs = statement.executeQuery();
+            while(rs.next()) {
+                result.add(new LoanExtended(
+                        rs.getString("isbn"),
+                        rs.getString("title"),
+                        rs.getString("name"),
+                        rs.getString("surname"),
+                        rs.getInt("id"),
+                        rs.getDate("orderdate"),
+                        rs.getDate("deadlinedate")));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return result;
+    }
+    public ArrayList<LoanExtended> getLoansWithUserInformationOverTime() {
+        ArrayList<LoanExtended> result = new ArrayList<>();
+        try {
+            String sql = "SELECT b.isbn, b.title, u.name, u.surname, u.id, l.orderdate, l.deadlinedate FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id HAVING l.deadlinedate < NOW();";
 
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();

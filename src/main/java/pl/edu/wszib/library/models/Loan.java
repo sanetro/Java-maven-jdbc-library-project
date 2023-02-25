@@ -9,16 +9,20 @@ public class Loan {
     private String bookId; // isbn
     private Date orderDate;
     private Date deadlineDate;
+    private Date returnDate;
+
+
 
     public Loan() {
     }
 
-    public Loan(int id, int userId, String bookId, Date orderDate, Date deadlineDate) {
+    public Loan(int id, int userId, String bookId, Date orderDate, Date deadlineDate, Date returnDate) {
         this.id = id;
         this.userid = userId;
         this.bookId = bookId;
         this.orderDate = orderDate;
         this.deadlineDate = deadlineDate;
+        this.returnDate = returnDate;
     }
 
     public int getId() {
@@ -36,6 +40,8 @@ public class Loan {
     public Date getOrderDate() {
         return orderDate;
     }
+
+    public Date getReturnDate() { return returnDate; }
 
     public int getUserid() {
         return userid;
@@ -60,4 +66,6 @@ public class Loan {
     public void setUserid(int userid) {
         this.userid = userid;
     }
+
+    public void setReturnDate(Date returnDate) { this.returnDate = returnDate; }
 }

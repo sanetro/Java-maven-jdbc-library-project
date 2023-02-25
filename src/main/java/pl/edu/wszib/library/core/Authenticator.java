@@ -11,17 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 public class Authenticator {
 
     final UserDAO userDAO = UserDAO.getInstance();
     final BookDAO bookDAO = BookDAO.getInstance();
     final LoanDAO loanDAO = LoanDAO.getInstance();
-
     final ProductsDB productsDB = ProductsDB.getInstance();
-
     private User loggedUser = null;
     private final String seed = "razdwa!3nie3trzyTYLKO2two!";
     private static final Authenticator instance = new Authenticator();
@@ -82,7 +78,7 @@ public class Authenticator {
 
             return "ISBN duplication";
         }
-        return "Values aren't in specific format.";
+        return "Values aren't in specific format or are blank.";
 
     }
 
@@ -138,11 +134,11 @@ public class Authenticator {
                 return "Insert book which you ordered";
             }
 
-            if (this.loanDAO.deleteLoan(this.userDAO.getSessionUser(), loanist)) {
-                return "Loan removed successful.";
+            if (this.loanDAO.returnBook(this.userDAO.getSessionUser(), loanist)) {
+                return "Returned book successful.";
             }
         }
-        return "Loan save failed.";
+        return "Returning book failed.";
 
     }
 

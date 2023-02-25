@@ -10,11 +10,12 @@ public class LoanExtended {
     private int id;
     private Date orderedDate;
     private Date deadlineDate;
+    private Date returnDate;
 
     public LoanExtended() {
     }
 
-    public LoanExtended(String isbn, String title, String name, String surname, int id, Date orderedDate, Date deadlineDate) {
+    public LoanExtended(String isbn, String title, String name, String surname, int id, Date orderedDate, Date deadlineDate, Date returnDate) {
         this.isbn = isbn;
         this.title = title;
         this.name = name;
@@ -22,6 +23,7 @@ public class LoanExtended {
         this.id = id;
         this.orderedDate = orderedDate;
         this.deadlineDate = deadlineDate;
+        this.returnDate = returnDate;
     }
 
     public String getIsbn() {
@@ -79,4 +81,8 @@ public class LoanExtended {
     public void setDeadlineDate(Date deadlineDate) {
         this.deadlineDate = deadlineDate;
     }
+
+    public Date getReturnDate() { return returnDate; }
+
+    public void setReturnDate(Date returnDate) { this.returnDate = returnDate; }
 }

@@ -67,17 +67,18 @@ public class GUI {
 
     public void layoutOrderedBooksExtended(ArrayList<LoanExtended> loans) {
         String line = "";
-        System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s\n",
-                "ISBN", "TITLE", "NAME", "SURNAME", "ID", "ORDERD DATE", "DEADLINE DATE");
-        for (int i = 0; i < 143; i++) line += "-"; System.out.println(line);
-        for (LoanExtended loan: loans) System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s\n",
+        System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
+                "ISBN", "TITLE", "USER NAME", "USER  SURNAME", "USER ID", "ORDERD DATE", "DEADLINE DATE", "RETURN DATE");
+        for (int i = 0; i < 163; i++) line += "-"; System.out.println(line);
+        for (LoanExtended loan: loans) System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
                 loan.getIsbn(),
                 loan.getTitle(),
                 loan.getName(),
                 loan.getSurname(),
                 loan.getId(),
                 loan.getOrderedDate(),
-                loan.getDeadlineDate());
+                loan.getDeadlineDate(),
+                loan.getReturnDate() == null ? "Not returned" : loan.getReturnDate());
     }
 
     public String readPlate() {

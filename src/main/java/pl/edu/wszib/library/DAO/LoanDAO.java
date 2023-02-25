@@ -5,16 +5,9 @@ import pl.edu.wszib.library.models.Loan;
 import pl.edu.wszib.library.models.LoanExtended;
 import pl.edu.wszib.library.models.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class LoanDAO {
     private static final LoanDAO instance = new LoanDAO();
@@ -25,7 +18,7 @@ public class LoanDAO {
 
     public boolean saveLoan(User user, Book book) {
         try {
-            String sql = "INSERT INTO loans (userid, bookid, orderdate, deadlinedate) VALUES (?,?,?,?)";
+            String sql = "INSERT INTO loans (userid, bookid, orderdate, deadlinedate, returndate) VALUES (?,?,?,?,NULL)";
 
             PreparedStatement ps = connection.prepareStatement(sql);
 
@@ -42,16 +35,16 @@ public class LoanDAO {
         }
     }
 
-    public boolean deleteLoan(User user, Loan loanist) {
+    public boolean returnBook(User user, Loan loan) {
         try {
 
-            String sql = "DELETE FROM loans WHERE userid = ? AND bookid = ?";
+            String sql = "UPDATE loans SET returndate = ? WHERE userid = ? AND bookid = ?;";
 
 
             PreparedStatement ps = connection.prepareStatement(sql);
-
-            ps.setInt(1, user.getId());
-            ps.setString(2, loanist.getBookId());
+            ps.setDate(1, Date.valueOf(LocalDate.now()));
+            ps.setInt(2, user.getId());
+            ps.setString(3, loan.getBookId());
 
             ps.executeUpdate();
             return true;
@@ -59,6 +52,7 @@ public class LoanDAO {
         } catch (SQLException e) {
             return false;
         }
+
     }
     public ArrayList<Loan> getLoans() {
         ArrayList<Loan> result = new ArrayList<>();
@@ -72,7 +66,8 @@ public class LoanDAO {
                         rs.getInt("userid"),
                         rs.getString("bookid"),
                         rs.getDate("orderdate"),
-                        rs.getDate("deadlinedate")));
+                        rs.getDate("deadlinedate"),
+                        rs.getDate("returndate")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -83,7 +78,7 @@ public class LoanDAO {
     public ArrayList<LoanExtended> getLoansWithUserInformation() {
         ArrayList<LoanExtended> result = new ArrayList<>();
         try {
-            String sql = "SELECT b.isbn, b.title, u.name, u.surname, u.id, l.orderdate, l.deadlinedate FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id";
+            String sql = "SELECT b.isbn, b.title, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id;";
 
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
@@ -95,7 +90,8 @@ public class LoanDAO {
                         rs.getString("surname"),
                         rs.getInt("id"),
                         rs.getDate("orderdate"),
-                        rs.getDate("deadlinedate")));
+                        rs.getDate("deadlinedate"),
+                        rs.getDate("returndate")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -105,7 +101,7 @@ public class LoanDAO {
     public ArrayList<LoanExtended> getLoansWithUserInformationOverTime() {
         ArrayList<LoanExtended> result = new ArrayList<>();
         try {
-            String sql = "SELECT b.isbn, b.title, u.name, u.surname, u.id, l.orderdate, l.deadlinedate FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id HAVING l.deadlinedate < NOW();";
+            String sql = "SELECT b.isbn, b.title, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id HAVING l.deadlinedate < NOW() AND l.returndate IS NULL";
 
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
@@ -117,7 +113,8 @@ public class LoanDAO {
                         rs.getString("surname"),
                         rs.getInt("id"),
                         rs.getDate("orderdate"),
-                        rs.getDate("deadlinedate")));
+                        rs.getDate("deadlinedate"),
+                        rs.getDate("returndate")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

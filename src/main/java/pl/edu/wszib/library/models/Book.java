@@ -4,15 +4,15 @@ public class Book {
     private String isbn;
     private String title;
     private String author;
-    private String date; // yyyy-mm-dd
+    private int available;
 
     public Book (){
     }
-    public Book (String isbn, String title, String author, String date) {
+    public Book (String isbn, String title, String author, int available) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;
-        this.date = date;
+        this.available = available;
     }
 
     public String getAuthor() {
@@ -23,8 +23,8 @@ public class Book {
         return this.isbn;
     }
 
-    public String getDate() {
-        return this.date;
+    public int getAvailable() {
+        return this.available;
     }
 
     public String getTitle() {
@@ -35,8 +35,8 @@ public class Book {
         this.author = author;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setAvailable(int available) {
+        this.available = available;
     }
 
     public void setIsbn(String isbn) {
@@ -56,7 +56,7 @@ public class Book {
         sb.append("\t\t");
         sb.append(author);
         sb.append("\t\t");
-        sb.append(date);
+        sb.append(available);
         return sb.toString();
     }
 

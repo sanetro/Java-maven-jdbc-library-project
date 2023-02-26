@@ -4,11 +4,11 @@ import org.apache.commons.codec.digest.DigestUtils;
 import pl.edu.wszib.library.DAO.BookDAO;
 import pl.edu.wszib.library.DAO.LoanDAO;
 import pl.edu.wszib.library.DAO.UserDAO;
-import pl.edu.wszib.library.database.ProductsDB;
 import pl.edu.wszib.library.models.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,7 +17,6 @@ public class Authenticator {
     final UserDAO userDAO = UserDAO.getInstance();
     final BookDAO bookDAO = BookDAO.getInstance();
     final LoanDAO loanDAO = LoanDAO.getInstance();
-    final ProductsDB productsDB = ProductsDB.getInstance();
     private User loggedUser = null;
     private final String seed = "razdwa!3nie3trzyTYLKO2two!";
     private static final Authenticator instance = new Authenticator();
@@ -34,7 +33,6 @@ public class Authenticator {
         }
     }
     public boolean register(User user) {
-        // No blank labels
         if(user.getPassword() == null || user.getLogin() == null ||
                 user.getName() == null || user.getSurname() == null ||
                 user.getPassword().equals("") || user.getLogin().equals("") ||
@@ -54,80 +52,76 @@ public class Authenticator {
     }
 
     public String addBookAgent(Book book) {
-        /*
-        ISBN 978-0-596-52068-7
-        ISBN-13: 978-0-596-52068-7
-        978 0 596 52068 7
-        9780596520687
-        0-596-52068-9
-        0 512 52068 9
-        ISBN-10 0-596-52068-9
-        ISBN-10: 0-596-52068-9
-        */
         String regexISBN = "^(?:ISBN(?:-1[03])?:? )?(?=[0-9X]{10}$|(?=(?:[0-9]+[- ]){3})[- 0-9X]{13}$|97[89][0-9]{10}" +
                 "$|(?=(?:[0-9]+[- ]){4})[- 0-9]{17}$)(?:97[89][- ]?)?[0-9]{1,5}[- ]?[0-9]+[- ]?[0-9]+[- ]?[0-9X]$";
-        String regexDate = "^[0-9]{4}-[0-9]{2}-[0-9]{2}$";
 
         Matcher isbnValidate = Pattern.compile(regexISBN).matcher(book.getIsbn());
-        Matcher dateValidate = Pattern.compile(regexDate).matcher(book.getDate());
-        if (isbnValidate.matches() && dateValidate.matches()) {
-            if (!this.bookDAO.searchExistsBook(book)){
-                this.bookDAO.addBook(book);
-                return "Book added successfully";
-            }
 
-            return "ISBN duplication";
+        if (!isbnValidate.matches()) {
+            return "Values aren't in specific format or are blank.";
         }
-        return "Values aren't in specific format or are blank.";
 
+        if (!this.bookDAO.searchExistsBook(book)){
+            this.bookDAO.addBook(book);
+            return "Book added successfully";
+        }
+
+        return "ISBN duplication";
     }
 
     public List<Book> showBookList() {
         return this.bookDAO.getAllBooks();
     }
 
-    public ArrayList<LoanExtended> showBookListAndUser() {
+    public ArrayList<LoanView> showBookListAndUser() {
         return this.loanDAO.getLoansWithUserInformation();
     }
 
-    public ArrayList<LoanExtended> showBookListAndUserOverTime() {
+    public ArrayList<LoanView> showBookListAndUserOverTime() {
         return this.loanDAO.getLoansWithUserInformationOverTime();
     }
 
 
     public String orderBookValidator(String name, String surname, String title, String action) {
 
-        if (name.equals("") || surname.equals("") || title.equals("")) {
+        if (name.equals("") || surname.equals("") || title.equals(""))
             return "Values aren't in specific format or are blank";
-        }
+
 
         if (!this.userDAO.getSessionUser().getName().equals(name) &&
-                !this.userDAO.getSessionUser().getSurname().equals(surname)) {
-            return "Authentication failed.";
-        }
+                !this.userDAO.getSessionUser().getSurname().equals(surname))
+                    return "Authentication failed.";
+
 
         Book givenBook = this.bookDAO.getAllBooks().stream()
                 .filter(book -> book.getTitle().equals(title))
                 .findFirst()
                 .orElse(null);
 
-        if (givenBook == null) {
+        if (givenBook == null)
             return "Book not found";
-        }
 
-        if (action == "addLoan") {
+
+
+
+
+        if (Objects.equals(action, "addLoan")) {
+            if (givenBook.getAvailable() == 0)
+                return "Book isn't available";
+
             if (this.loanDAO.saveLoan(this.userDAO.getSessionUser(), givenBook)) {
+                this.bookDAO.setBookNotavailable(givenBook);
                 return "Loan save successful.";
             }
         }
 
-        // In filter. Trying to get bookId in loan by title
-        // So If given title is in book return isbn
-        // Than if isbn is identical to bookId this is right loan who wants to give back book who ordered previously
-        if (action == "deleteLoan") {
+
+
+        if (Objects.equals(action, "deleteLoan")) {
+
             Loan loanist = this.loanDAO.getLoans().stream()
                     .filter(loan -> loan.getBookId().equals(givenBook.getIsbnFromTitle(title)) &&
-                            loan.getReturnDate() != null &&
+                            !this.loanDAO.isAvailable(title) &&
                             loan.getUserid() == this.userDAO.getSessionUser().getId())
                     .findFirst()
                     .orElse(null);
@@ -137,34 +131,15 @@ public class Authenticator {
             }
 
             if (this.loanDAO.returnBook(this.userDAO.getSessionUser(), loanist)) {
+                this.bookDAO.setBookAvailable(givenBook);
                 return "Returned book successful.";
             }
         }
+
+        if (givenBook.getAvailable() == 0)
+            return "Book isn't available";
+
         return "Returning book failed.";
-
-    }
-
-    public String checkProduct(int orderedId, int orderedQuantity) {
-        if (productsDB.findById(orderedId))
-        {
-            if (orderedQuantity >= 1)
-            {
-                if (productsDB.getProduct(orderedId).getQuantity() - orderedQuantity >= 0)
-                {
-                    return String.format("Zakup przeszedł pomyślny. Do zapłaty: %2.2f",
-                            productsDB.buyProduct(orderedId, orderedQuantity));
-                }
-                else {
-                    return "Liczba sztuk przekracza liczbe sztuk posiadanych w magazynie przedmiotu (zmniejsz liczbe sztuk).";
-                }
-            }
-            else {
-                return "Liczba sztuk musi być minimum 1";
-            }
-        }
-        else {
-            return "Nie znaleziono przedmiotu";
-        }
     }
 
     public String UserToAdmin(String login) {
@@ -176,38 +151,15 @@ public class Authenticator {
         };
     }
 
-    public String magazineManager(int givenId, int addValue) {
-        if (productsDB.findById(givenId))
-        {
-            if (addValue >= 1)
-            {
-                productsDB.getProduct(givenId).addQuantity(addValue);
-                return "Pomyślnie zakończono";
-            }
-            else
-            {
-                return "Liczba nie może być mniejsza niż 1";
-            }
-        }
-        else
-        {
-            return "Nie znaleziono przedmiotu";
-        }
-    }
-
     public static Authenticator getInstance() {
         return instance;
     }
+
     public User getLoggedUser() {
         return loggedUser;
     }
 
     public void unmountLoggedUser() { this.loggedUser = null; }
-
-    public String getSeed() {
-        return seed;
-    }
-
 
     public String isBlank(String text) {
         return text.equals("") ? null : text;

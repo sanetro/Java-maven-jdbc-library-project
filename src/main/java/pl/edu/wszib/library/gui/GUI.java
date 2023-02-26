@@ -5,11 +5,10 @@ import java.util.List;
 import java.util.Scanner;
 
 import pl.edu.wszib.library.models.*;
-import pl.edu.wszib.library.database.ProductsDB;
+
 
 public class GUI {
     private final Scanner scanner = new Scanner(System.in);
-    final ProductsDB productsDB = ProductsDB.getInstance();
     private static final GUI instance = new GUI();
 
     private GUI() {
@@ -49,35 +48,23 @@ public class GUI {
         System.out.println("1. ISBN");
         System.out.println("2. Title");
         System.out.println("3. Author");
-        System.out.println("4. Date");
         return scanner.nextLine();
     }
 
-    public int readId() {
-        System.out.println("ID przedmiotu:");
-        return scanner.nextInt();
-    }
-
-    public int readQuantity() {
-        System.out.println("Liczba sztuk:");
-        return scanner.nextInt();
-    }
-
     public void layoutBooks(List<Book> books) {
-        System.out.printf("%-25s%-40s%30s%20s\n", "ISBN", "TITLE", "AUTHOR", "DATE");
+        System.out.printf("%-25s%-40s%30s\n", "ISBN", "TITLE", "AUTHOR");
         headline(115);
-        for (Book book : books) System.out.printf("%-25s%-40s%30s%20s\n",
+        for (Book book : books) System.out.printf("%-25s%-40s%30s\n",
                 book.getIsbn(),
                 book.getTitle(),
-                book.getAuthor(),
-                book.getDate());
+                book.getAuthor());
     }
 
-    public void layoutOrderedBooksExtended(ArrayList<LoanExtended> loans) {
+    public void layoutOrderedBooksExtended(ArrayList<LoanView> loans) {
         System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
                 "ISBN", "TITLE", "USER NAME", "USER  SURNAME", "USER ID", "ORDERD DATE", "DEADLINE DATE", "RETURN DATE");
         headline(163);
-        for (LoanExtended loan: loans) System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
+        for (LoanView loan: loans) System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
                 loan.getIsbn(),
                 loan.getTitle(),
                 loan.getName(),
@@ -88,15 +75,9 @@ public class GUI {
                 loan.getReturnDate() == null ? "Not returned" : loan.getReturnDate());
     }
 
-    public String readPlate() {
-        System.out.println("Plate:");
-        return this.scanner.nextLine();
-    }
-
     public String readTextByCalled(String labelName) {
         System.out.println(labelName+ ":"); return scanner.nextLine();
     }
-
 
     public User readLoginAndPassword() {
         User user = new User();
@@ -114,12 +95,27 @@ public class GUI {
         return user;
     }
 
+    private void correctPattern(){
+        System.out.println("""
+                Patterns which are correct:
+                __________________________
+                ISBN 978-0-596-52068-7
+                ISBN-13: 978-0-596-52068-7
+                978 0 596 52068 7
+                9780596520687
+                0-596-52068-9
+                0 512 52068 9
+                ISBN-10 0-596-52068-9
+                ISBN-10: 0-596-52068-9""");
+    }
+
     public Book readBookFields() {
         Book book = new Book();
+        correctPattern();
         book.setIsbn(this.readTextByCalled("ISBN"));
         book.setTitle(this.readTextByCalled("Title"));
         book.setAuthor(this.readTextByCalled("Author"));
-        book.setDate(this.readTextByCalled("Date (yyyy-mm-dd)"));
+        book.setAvailable(1);
         return book;
     }
 
@@ -129,12 +125,12 @@ public class GUI {
         System.out.println();
     }
 
-    public void showExtendedBookInfo(ArrayList<LoanExtended> loans) {
+    public void showExtendedBookInfo(ArrayList<LoanView> loans) {
         try {
             System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
                     "ISBN", "TITLE", "AUTHOR", "NAME & SURNAME", "USER ID", "ORDERED DATE", "DEADLINE DATE", "RETURNED DATE");
             headline(163);
-            for (LoanExtended loan : loans)
+            for (LoanView loan : loans)
                 System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
                         loan.getIsbn(),
                         loan.getTitle(),
@@ -158,9 +154,6 @@ public class GUI {
     }
     public String readISBN() {
         return this.readTextByCalled("ISBN of book");
-    }
-    public String readDate() {
-        return this.readTextByCalled("Date of book");
     }
     public String readAuthor() {
         return this.readTextByCalled("Author of book");

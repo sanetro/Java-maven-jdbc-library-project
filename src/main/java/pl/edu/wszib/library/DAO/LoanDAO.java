@@ -3,7 +3,7 @@ package pl.edu.wszib.library.DAO;
 import pl.edu.wszib.library.core.ConnectionProvider;
 import pl.edu.wszib.library.models.Book;
 import pl.edu.wszib.library.models.Loan;
-import pl.edu.wszib.library.models.LoanExtended;
+import pl.edu.wszib.library.models.LoanView;
 import pl.edu.wszib.library.models.User;
 
 import java.sql.*;
@@ -76,15 +76,31 @@ public class LoanDAO {
         return result;
     }
 
-    public ArrayList<LoanExtended> getLoansWithUserInformation() {
-        ArrayList<LoanExtended> result = new ArrayList<>();
+    public boolean isAvailable(String title) {
+        ArrayList<Loan> result = new ArrayList<>();
+        try {
+            String sql = "SELECT b.title, l.returndate FROM books as b LEFT JOIN loans as l ON b.isbn = l.bookid HAVING l.returndate IS NULL AND b.title = ? AND b.available = 0;";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, title);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                return true;
+            }
+        } catch (SQLException e) {
+            return false;
+        }
+        return false;
+    }
+
+    public ArrayList<LoanView> getLoansWithUserInformation() {
+        ArrayList<LoanView> result = new ArrayList<>();
         try {
             String sql = "SELECT b.isbn, b.title, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id;";
 
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             while(rs.next()) {
-                result.add(new LoanExtended(
+                result.add(new LoanView(
                         rs.getString("isbn"),
                         rs.getString("title"),
                         null,
@@ -101,15 +117,15 @@ public class LoanDAO {
         }
         return result;
     }
-    public ArrayList<LoanExtended> getLoansWithUserInformationOverTime() {
-        ArrayList<LoanExtended> result = new ArrayList<>();
+    public ArrayList<LoanView> getLoansWithUserInformationOverTime() {
+        ArrayList<LoanView> result = new ArrayList<>();
         try {
             String sql = "SELECT b.isbn, b.title, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id HAVING l.deadlinedate < NOW() AND l.returndate IS NULL";
 
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             while(rs.next()) {
-                result.add(new LoanExtended(
+                result.add(new LoanView(
                         rs.getString("isbn"),
                         rs.getString("title"),
                         null,
@@ -127,8 +143,8 @@ public class LoanDAO {
         return result;
     }
 
-    public ArrayList<LoanExtended> getLoansWithUserInformationByOption(String option, String value) {
-        ArrayList<LoanExtended> result = new ArrayList<>();
+    public ArrayList<LoanView> getLoansWithUserInformationByOption(String option, String value) {
+        ArrayList<LoanView> result = new ArrayList<>();
 
         try {
             String sql = null;
@@ -148,20 +164,14 @@ public class LoanDAO {
                             "FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id " +
                             "HAVING b.author LIKE CONCAT( '%',?,'%')";
                 }
-                case "4" -> {
-                    sql = "SELECT b.isbn, b.title, b.author, b.date, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate " +
-                            "FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id " +
-                            "HAVING b.date LIKE CONCAT( '%',?,'%')";
-                }
             }
             
 
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, value);
-            System.out.println(ps);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                result.add(new LoanExtended(
+                result.add(new LoanView(
                         rs.getString("isbn"),
                         rs.getString("title"),
                         rs.getString("author"),

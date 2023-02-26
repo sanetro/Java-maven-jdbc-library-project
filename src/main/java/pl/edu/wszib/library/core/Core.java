@@ -99,9 +99,6 @@ public class Core {
                                 case "3" -> this.gui.showExtendedBookInfo(
                                         this.loanDAO.getLoansWithUserInformationByOption("3",
                                                 this.authenticator.isBlank(this.gui.readAuthor())));
-                                case "4" -> this.gui.showExtendedBookInfo(
-                                        this.loanDAO.getLoansWithUserInformationByOption("4",
-                                                this.authenticator.isBlank(this.gui.readDate())));
                                 default -> System.out.println("Undefined option");
                             }
                         }
@@ -118,30 +115,10 @@ public class Core {
             {
                 while (isLogged)
                 {
-                    switch (this.gui.showUserPanel())
-                    {
-                        case "1": // Show product list
-                            //this.gui.listProduct();
-                            break;
+                    //switch (this.gui.showUserPanel())
 
-                        case "2": // Buy product
-                            System.out.println(
-                                    this.authenticator.checkProduct(
-                                            this.gui.readId(),
-                                            this.gui.readQuantity()
-                                    ));
-                            break;
+                        System.out.println("NO");
 
-                        case "3": // Logout
-                            System.out.println("Wylogowano");
-                            this.authenticator.unmountLoggedUser();
-                            isLogged = false;
-                            break;
-
-                        default:
-                            System.out.println("Nie ma takiej opcji");
-                            break;
-                    }
                 }
             }
             else System.out.println("Undefined Role. Can not find interface.");

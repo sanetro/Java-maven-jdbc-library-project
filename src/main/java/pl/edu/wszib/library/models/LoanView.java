@@ -2,7 +2,7 @@ package pl.edu.wszib.library.models;
 
 import java.util.Date;
 
-public class LoanExtended {
+public class LoanView {
     private String isbn;
     private String title;
     private String author;
@@ -14,10 +14,10 @@ public class LoanExtended {
     private Date deadlineDate;
     private Date returnDate;
 
-    public LoanExtended() {
+    public LoanView() {
     }
 
-    public LoanExtended(String isbn, String title, String author, Date date, String name, String surname, int id, Date orderedDate, Date deadlineDate, Date returnDate) {
+    public LoanView(String isbn, String title, String author, Date date, String name, String surname, int id, Date orderedDate, Date deadlineDate, Date returnDate) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;

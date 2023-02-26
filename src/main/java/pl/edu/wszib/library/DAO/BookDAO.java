@@ -17,14 +17,13 @@ public class BookDAO {
 
     public void addBook(Book book) {
         try {
-            String sql = "INSERT INTO books VALUES (?,?,?,?)";
+            String sql = "INSERT INTO books VALUES (?,?,?,1)";
 
             PreparedStatement ps = connection.prepareStatement(sql);
 
             ps.setString(1, book.getIsbn());
             ps.setString(2, book.getTitle());
             ps.setString(3, book.getAuthor());
-            ps.setString(4, book.getDate());
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -68,10 +67,35 @@ public class BookDAO {
         }
         return false;
     }
+
+    public boolean setBookAvailable(Book book) {
+        try {
+            String sql = "UPDATE books SET available = 1 WHERE available = 0 AND title = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, book.getTitle());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean setBookNotavailable(Book book) {
+        try {
+            String sql = "UPDATE books SET available = 0 WHERE available = 1 AND title = ?";
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, book.getTitle());
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            return false;
+        }
+        return true;
+    }
+
     public List<Book> getAllBooks(){
         List<Book> result = new ArrayList<>();
         try {
-            String sql = "SELECT isbn, title, author, date FROM books";
+            String sql = "SELECT isbn, title, author, available FROM books";
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
             while(rs.next()){
@@ -79,7 +103,7 @@ public class BookDAO {
                         rs.getString("isbn"),
                         rs.getString("title"),
                         rs.getString("author"),
-                        rs.getString("date")));
+                        rs.getInt("available")));
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

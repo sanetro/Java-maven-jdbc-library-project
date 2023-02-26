@@ -95,7 +95,7 @@ public class LoanDAO {
     public ArrayList<LoanView> getLoansWithUserInformation() {
         ArrayList<LoanView> result = new ArrayList<>();
         try {
-            String sql = "SELECT b.isbn, b.title, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id;";
+            String sql = "SELECT b.isbn, b.title, b.author, b.available, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id;";
 
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
@@ -103,8 +103,8 @@ public class LoanDAO {
                 result.add(new LoanView(
                         rs.getString("isbn"),
                         rs.getString("title"),
-                        null,
-                        null,
+                        rs.getString("author"),
+                        rs.getInt("available"),
                         rs.getString("name"),
                         rs.getString("surname"),
                         rs.getInt("id"),
@@ -120,7 +120,7 @@ public class LoanDAO {
     public ArrayList<LoanView> getLoansWithUserInformationOverTime() {
         ArrayList<LoanView> result = new ArrayList<>();
         try {
-            String sql = "SELECT b.isbn, b.title, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id HAVING l.deadlinedate < NOW() AND l.returndate IS NULL";
+            String sql = "SELECT b.isbn, b.title, b.author, b.available, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id HAVING l.deadlinedate < NOW() AND l.returndate IS NULL";
 
             PreparedStatement statement = connection.prepareStatement(sql);
             ResultSet rs = statement.executeQuery();
@@ -128,8 +128,8 @@ public class LoanDAO {
                 result.add(new LoanView(
                         rs.getString("isbn"),
                         rs.getString("title"),
-                        null,
-                        null,
+                        rs.getString("author"),
+                        rs.getInt("available"),
                         rs.getString("name"),
                         rs.getString("surname"),
                         rs.getInt("id"),
@@ -150,19 +150,14 @@ public class LoanDAO {
             String sql = null;
             switch (option) {
                 case "1" -> {
-                    sql = "SELECT b.isbn, b.title, b.author, b.date, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate " +
-                            "FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id " +
-                            "HAVING b.isbn LIKE CONCAT( '%',?,'%')";
+                    sql = "SELECT b.isbn, b.title, b.author, b.available, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM books as b JOIN loans as l ON b.isbn = l.bookid JOIN users as u ON l.userid = u.id GROUP BY b.isbn HAVING b.isbn LIKE CONCAT( '%',?,'%');";
                 }
                 case "2" -> {
-                    sql = "SELECT b.isbn, b.title, b.author, b.date, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate " +
-                            "FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id " +
-                            "HAVING b.title LIKE CONCAT( '%',?,'%')";
+                    sql = "SELECT b.isbn, b.title, b.author, b.available, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM books as b JOIN loans as l ON b.isbn = l.bookid JOIN users as u ON l.userid = u.id GROUP BY b.title HAVING b.title LIKE CONCAT( '%',?,'%');";
+
                 }
                 case "3" -> {
-                    sql = "SELECT b.isbn, b.title, b.author, b.date, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate " +
-                            "FROM loans as l INNER JOIN books as b ON l.bookid = b.isbn INNER JOIN users as u ON l.userid = u.id " +
-                            "HAVING b.author LIKE CONCAT( '%',?,'%')";
+                    sql = "SELECT b.isbn, b.title, b.author, b.available, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM books as b JOIN loans as l ON b.isbn = l.bookid JOIN users as u ON l.userid = u.id GROUP BY b.author HAVING b.author LIKE CONCAT( '%',?,'%');";
                 }
             }
             
@@ -175,7 +170,7 @@ public class LoanDAO {
                         rs.getString("isbn"),
                         rs.getString("title"),
                         rs.getString("author"),
-                        rs.getDate("date"),
+                        rs.getInt("available"),
                         rs.getString("name"),
                         rs.getString("surname"),
                         rs.getInt("id"),

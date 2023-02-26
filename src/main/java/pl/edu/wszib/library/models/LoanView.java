@@ -6,7 +6,7 @@ public class LoanView {
     private String isbn;
     private String title;
     private String author;
-    private Date date;
+    private int available;
     private  String name;
     private  String surname;
     private int id;
@@ -14,14 +14,14 @@ public class LoanView {
     private Date deadlineDate;
     private Date returnDate;
 
-    public LoanView() {
+    public LoanView(String isbn, String title, String author, Integer available, String name, String surname, int id, java.sql.Date orderdate, java.sql.Date deadlinedate, java.sql.Date returndate) {
     }
 
-    public LoanView(String isbn, String title, String author, Date date, String name, String surname, int id, Date orderedDate, Date deadlineDate, Date returnDate) {
+    public LoanView(String isbn, String title, String author, int available, String name, String surname, int id, Date orderedDate, Date deadlineDate, Date returnDate) {
         this.isbn = isbn;
         this.title = title;
         this.author = author;
-        this.date = date;
+        this.available = available;
         this.name = name;
         this.surname = surname;
         this.id = id;
@@ -96,12 +96,12 @@ public class LoanView {
         this.author = author;
     }
 
-    public Date getDate() {
-        return date;
+    public int getAvailable() {
+        return available;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setAvailable(int available) {
+        this.available = available;
     }
 
     public void setReturnDate(Date returnDate) { this.returnDate = returnDate; }

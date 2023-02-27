@@ -4,10 +4,10 @@ import java.sql.*;
 import java.sql.Connection;
 
 public class ConnectionProvider {
-    private static final String url = "jdbc:mysql://localhost:3306/librarydb";
+    private String url = "jdbc:mysql://localhost:3306/librarydb";
 
-    private static final String user = "root";
-    private static final String password = "";
+    private String user = "root";
+    private String password = "";
     public static Connection conn;
     private static final ConnectionProvider instance = new ConnectionProvider();
 
@@ -32,7 +32,14 @@ public class ConnectionProvider {
         }
     }
 
-
+    public void setUrl(String url) {
+        this.url = url;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }public void setUser(String user) {
+        this.user = user;
+    }
 
     public static ConnectionProvider getInstance() { return instance; }
 

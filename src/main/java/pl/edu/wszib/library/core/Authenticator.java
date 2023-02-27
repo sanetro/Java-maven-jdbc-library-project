@@ -56,16 +56,12 @@ public class Authenticator {
 
         Matcher isbnValidate = Pattern.compile(regexISBN).matcher(book.getIsbn());
 
-        if (!isbnValidate.matches()) {
-            return "Values aren't in specific format or are blank.";
-        }
+        if (!isbnValidate.matches()) return "Values aren't in specific format or are blank.";
+        if (this.bookDAO.searchBookByISBN(book)) return "ISBN duplication";
+        if (this.bookDAO.searchBookByTitle(book)) return "Title duplicated";
 
-        if (!this.bookDAO.searchExistsBook(book)){
-            this.bookDAO.addBook(book);
-            return "Book added successfully";
-        }
-
-        return "ISBN duplication";
+        this.bookDAO.addBook(book);
+        return "Book added Successful.";
     }
 
     public List<Book> showBookList() {

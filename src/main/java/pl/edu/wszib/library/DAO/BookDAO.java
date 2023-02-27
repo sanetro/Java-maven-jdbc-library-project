@@ -34,7 +34,7 @@ public class BookDAO {
 
 
 
-    public boolean searchExistsBook(Book book) {
+    public boolean searchBookByISBN(Book book) {
         try {
             String sql = "SELECT * FROM books WHERE isbn = ?";
 
@@ -51,12 +51,12 @@ public class BookDAO {
         return false;
     }
 
-    public boolean searchBookByTitle(String title) {
+    public boolean searchBookByTitle(Book book) {
         try {
             String sql = "SELECT * FROM books WHERE title = ?";
 
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, title);
+            ps.setString(1, book.getTitle());
 
             ResultSet rs = ps.executeQuery();
             if(rs.next()) {

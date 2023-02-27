@@ -37,7 +37,6 @@ public class Authenticator {
                 user.getName() == null || user.getSurname() == null ||
                 user.getPassword().equals("") || user.getLogin().equals("") ||
                 user.getName().equals("") || user.getSurname().equals("")) {
-            System.out.println(user.getPassword());
             return false;
         }
 

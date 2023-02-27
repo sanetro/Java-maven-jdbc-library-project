@@ -150,20 +150,34 @@ public class LoanDAO {
             String sql = null;
             switch (option) {
                 case "1" -> {
-                    sql = "SELECT b.isbn, b.title, b.author, b.available, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM books as b JOIN loans as l ON b.isbn = l.bookid JOIN users as u ON l.userid = u.id GROUP BY b.isbn HAVING b.isbn LIKE CONCAT( '%',?,'%');";
+                    sql = "SELECT b.isbn, b.title, b.author, b.available, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate \n" +
+                            "FROM books as b \n" +
+                            "LEFT JOIN loans as l ON b.isbn = l.bookid \n" +
+                            "LEFT JOIN users as u ON l.userid = u.id \n" +
+                            "where l.returndate IS NULL AND (b.isbn LIKE CONCAT('%',?,'%') OR b.isbn LIKE CONCAT('%',?) OR b.isbn LIKE CONCAT(?,'%'))";
                 }
                 case "2" -> {
-                    sql = "SELECT b.isbn, b.title, b.author, b.available, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM books as b JOIN loans as l ON b.isbn = l.bookid JOIN users as u ON l.userid = u.id GROUP BY b.title HAVING b.title LIKE CONCAT( '%',?,'%');";
+                    sql = "SELECT b.isbn, b.title, b.author, b.available, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate \n" +
+                            "FROM books as b \n" +
+                            "LEFT JOIN loans as l ON b.isbn = l.bookid \n" +
+                            "LEFT JOIN users as u ON l.userid = u.id \n" +
+                            "where l.returndate IS NULL AND (b.title LIKE CONCAT('%',?,'%') OR b.title LIKE CONCAT('%',?) OR b.title LIKE CONCAT(?,'%'))";
 
                 }
                 case "3" -> {
-                    sql = "SELECT b.isbn, b.title, b.author, b.available, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate FROM books as b JOIN loans as l ON b.isbn = l.bookid JOIN users as u ON l.userid = u.id GROUP BY b.author HAVING b.author LIKE CONCAT( '%',?,'%');";
+                    sql = "SELECT b.isbn, b.title, b.author, b.available, u.name, u.surname, u.id, l.orderdate, l.deadlinedate, l.returndate \n" +
+                            "FROM books as b \n" +
+                            "LEFT JOIN loans as l ON b.isbn = l.bookid \n" +
+                            "LEFT JOIN users as u ON l.userid = u.id \n" +
+                            "where l.returndate IS NULL AND (b.author LIKE CONCAT('%',?,'%') OR b.author LIKE CONCAT('%',?) OR b.author LIKE CONCAT(?,'%'))";
                 }
             }
             
 
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, value);
+            ps.setString(2, value);
+            ps.setString(3, value);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
                 result.add(new LoanView(

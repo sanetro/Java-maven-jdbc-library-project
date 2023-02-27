@@ -115,10 +115,48 @@ public class Core {
             {
                 while (isLogged)
                 {
-                    //switch (this.gui.showUserPanel())
+                    switch (this.gui.showUserPanel()) {
 
-                        System.out.println("NO");
+                        case "1" -> // List all books
+                                this.gui.layoutBooks(this.authenticator.showBookList());
 
+                        case "2" -> // Order book
+                                System.out.println(
+                                        this.authenticator.orderBookValidator(
+                                                this.gui.readName(),
+                                                this.gui.readSurname(),
+                                                this.gui.readTitle(),
+                                                "addLoan"));
+
+                        case "3" -> // Return Book
+                                System.out.println(
+                                        this.authenticator.orderBookValidator(
+                                                this.gui.readName(),
+                                                this.gui.readSurname(),
+                                                this.gui.readTitle(),
+                                                "deleteLoan"));
+
+                        case "4" -> { // Search book and check available
+                            switch (this.gui.showOptionsSearchBook()) {
+                                case "1" -> this.gui.showExtendedBookInfo(
+                                        this.loanDAO.getLoansWithUserInformationByOption("1",
+                                                this.authenticator.isBlank(this.gui.readISBN())));
+                                case "2" -> this.gui.showExtendedBookInfo(
+                                        this.loanDAO.getLoansWithUserInformationByOption("2",
+                                                this.authenticator.isBlank(this.gui.readTitle())));
+                                case "3" -> this.gui.showExtendedBookInfo(
+                                        this.loanDAO.getLoansWithUserInformationByOption("3",
+                                                this.authenticator.isBlank(this.gui.readAuthor())));
+                                default -> System.out.println("Undefined option");
+                            }
+                        }
+                        case "5" -> { // Logout
+                            System.out.println("Logged out");
+                            this.authenticator.unmountLoggedUser();
+                            isLogged = false;
+                        }
+                        default -> System.out.println("Undefined option!");
+                    }
                 }
             }
             else System.out.println("Undefined Role. Can not find interface.");

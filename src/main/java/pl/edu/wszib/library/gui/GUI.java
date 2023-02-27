@@ -36,10 +36,11 @@ public class GUI {
     }
     public String showUserPanel() {
         System.out.println("\n=== User Panel ===");
-        System.out.println("1. Search book");
+        System.out.println("1. Show List of all books");
         System.out.println("2. Loan the book");
-        System.out.println("3. List of books");
-        System.out.println("4. Logout");
+        System.out.println("3. Return book");
+        System.out.println("4. Search book and check available");
+        System.out.println("5. Logout");
         return scanner.nextLine();
     }
 
@@ -62,7 +63,7 @@ public class GUI {
 
     public void layoutOrderedBooksExtended(ArrayList<LoanView> loans) {
         System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
-                "ISBN", "TITLE", "USER NAME", "USER  SURNAME", "USER ID", "ORDERD DATE", "DEADLINE DATE", "RETURN DATE");
+                "ISBN", "TITLE", "USER_NAME", "USER  SURNAME", "USER_ID", "ORDERED_DATE", "DEADLINE_DATE", "RETURN_DATE");
         headline(163);
         for (LoanView loan: loans) System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
                 loan.getIsbn(),
@@ -127,19 +128,19 @@ public class GUI {
 
     public void showExtendedBookInfo(ArrayList<LoanView> loans) {
         try {
-            System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
-                    "ISBN", "TITLE", "AUTHOR", "NAME & SURNAME", "USER ID", "ORDERED DATE", "DEADLINE DATE", "RETURNED DATE");
+            System.out.printf("%-10s%-30s%-30s%-20s%-20s%-10s%-20s%-20s\n",
+                    "AVAILABLE", "ISBN", "TITLE", "AUTHOR", "NAME & SURNAME", "USER_ID", "ORDERED_DATE", "DEADLINE_DATE");
             headline(163);
             for (LoanView loan : loans)
-                System.out.printf("%-30s%-30s%-20s%-20s%-10s%-20s%-20s%-20s\n",
+                System.out.printf("%-10s%-30s%-30s%-20s%-20s%-10s%-20s%-20s\n",
+                        loan.getAvailable() == 1 ? "Yes" : "No",
                         loan.getIsbn(),
                         loan.getTitle(),
                         loan.getAuthor(),
-                        loan.getReturnDate() == null ? loan.getName() + " " + loan.getSurname(): "",
-                        loan.getReturnDate() == null ? loan.getId(): "",
-                        loan.getReturnDate() == null ? loan.getOrderedDate(): "",
-                        loan.getReturnDate() == null ? loan.getDeadlineDate(): "",
-                        loan.getReturnDate() == null ? "Not returned" : loan.getReturnDate());
+                        loan.getAvailable() == 0 ? loan.getName() + " " + loan.getSurname(): "",
+                        loan.getAvailable() == 0 ? loan.getId(): " ",
+                        loan.getAvailable() == 0 ? loan.getOrderedDate(): "",
+                        loan.getAvailable() == 0 && loan.getReturnDate() == null ? loan.getDeadlineDate(): "");
         } catch (Exception e) {
             System.out.println("No records");
         }

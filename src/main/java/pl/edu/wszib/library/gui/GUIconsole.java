@@ -1,20 +1,47 @@
 package pl.edu.wszib.library.gui;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import pl.edu.wszib.library.gui.model.ColorPallete;
 import pl.edu.wszib.library.models.*;
+
+import javax.swing.*;
 
 
 public class GUIconsole {
     private final Scanner scanner = new Scanner(System.in);
     private static final GUIconsole instance = new GUIconsole();
 
+    private JFrame rootFrame = new JFrame();
+
+    private ColorPallete colorPallete = new ColorPallete();
     private GUIconsole() {
+        rootFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        rootFrame.setTitle("Library Gray Lake");
+        rootFrame.setVisible(true);
+    }
+
+    public void WelcomePage() {
+        // https://coolors.co/palette/2b2d42-8d99ae-edf2f4-ef233c-d90429
+        JButton button = new JButton("Click me");
+        JLabel label = new JLabel("Number of clicks");
+
+        JPanel panel = new JPanel();
+        panel.setBorder(BorderFactory.createEmptyBorder(300, 300, 300, 300));
+        panel.setLayout(new GridLayout(0, 1));
+        panel.add(button);
+        panel.add(label);
+        panel.setBackground(colorPallete.getLightGray());
+
+        rootFrame.add(panel, BorderLayout.CENTER);
+        rootFrame.pack();
     }
 
     public String showMenu() {
+        WelcomePage();
         System.out.println("1. Login");
         System.out.println("2. Register");
         System.out.println("3. Exit");

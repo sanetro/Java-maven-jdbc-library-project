@@ -26,14 +26,20 @@ public class GUIconsole {
 
     public void WelcomePage() {
         // https://coolors.co/palette/2b2d42-8d99ae-edf2f4-ef233c-d90429
-        JButton button = new JButton("Click me");
-        JLabel label = new JLabel("Number of clicks");
+        JButton button = new JButton("Log in");
+        JLabel labelLogin = new JLabel("Login");
+        JLabel labelPassword = new JLabel("Password");
+        JTextField loginInput = new JTextField(20);
+        JTextField passwordInput = new JTextField(20);
 
         JPanel panel = new JPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(300, 300, 300, 300));
         panel.setLayout(new GridLayout(0, 1));
+        panel.add(labelLogin);
+        panel.add(loginInput);
+        panel.add(labelPassword);
+        panel.add(passwordInput);
         panel.add(button);
-        panel.add(label);
         panel.setBackground(colorPallete.getLightGray());
 
         rootFrame.add(panel, BorderLayout.CENTER);

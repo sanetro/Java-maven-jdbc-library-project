@@ -19,30 +19,47 @@ public class GUIconsole {
 
     private ColorPallete colorPallete = new ColorPallete();
     private GUIconsole() {
+        rootFrame.setSize(1080/2, 1920/2);
+        rootFrame.setLocationRelativeTo(null);
+        rootFrame.setResizable(false);
         rootFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         rootFrame.setTitle("Library Gray Lake");
         rootFrame.setVisible(true);
     }
 
     public void WelcomePage() {
+        int emptyBorderWidth = 80;
+
         // https://coolors.co/palette/2b2d42-8d99ae-edf2f4-ef233c-d90429
         JButton button = new JButton("Log in");
         JLabel labelLogin = new JLabel("Login");
         JLabel labelPassword = new JLabel("Password");
         JTextField loginInput = new JTextField(20);
         JTextField passwordInput = new JTextField(20);
+        ImageIcon imageIcon = new ImageIcon("./src/main/resources/Icons/booksSimple-small2.png");
+        System.out.println(imageIcon.getIconWidth());
+        JLabel imageLabel = new JLabel(imageIcon);
 
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createEmptyBorder(300, 300, 300, 300));
-        panel.setLayout(new GridLayout(0, 1));
-        panel.add(labelLogin);
-        panel.add(loginInput);
-        panel.add(labelPassword);
-        panel.add(passwordInput);
-        panel.add(button);
-        panel.setBackground(colorPallete.getLightGray());
+        JPanel panelSouth = new JPanel();
+        JPanel panelNorth = new JPanel();
+        panelSouth.setBorder(BorderFactory.createEmptyBorder(10, emptyBorderWidth, emptyBorderWidth, emptyBorderWidth));
+        panelNorth.setBorder(BorderFactory.createEmptyBorder(emptyBorderWidth, emptyBorderWidth, 10, emptyBorderWidth));
+        panelSouth.setLayout(new GridLayout(1, 1));
+        panelSouth.setLayout(new GridLayout(5, 0));
 
-        rootFrame.add(panel, BorderLayout.CENTER);
+        panelNorth.add(imageLabel);
+
+        panelSouth.add(labelLogin);
+        panelSouth.add(loginInput);
+        panelSouth.add(labelPassword);
+        panelSouth.add(passwordInput);
+        panelSouth.add(button);
+
+        panelSouth.setBackground(colorPallete.getLightGray());
+        panelNorth.setBackground(colorPallete.getLightGray());
+
+        rootFrame.add(panelSouth, BorderLayout.SOUTH);
+        rootFrame.add(panelNorth, BorderLayout.NORTH);
         rootFrame.pack();
     }
 

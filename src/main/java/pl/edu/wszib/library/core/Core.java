@@ -1,7 +1,7 @@
 package pl.edu.wszib.library.core;
 
 import pl.edu.wszib.library.DAO.LoanDAO;
-import pl.edu.wszib.library.gui.GUI;
+import pl.edu.wszib.library.gui.GUIconsole;
 import pl.edu.wszib.library.models.Role;
 
 
@@ -9,7 +9,7 @@ public class Core {
 
     final Authenticator authenticator = Authenticator.getInstance();
     final LoanDAO loanDAO = LoanDAO.getInstance();
-    final GUI gui = GUI.getInstance();
+    final GUIconsole gui = GUIconsole.getInstance();
     private static final Core instance = new Core();
 
     private Core() {

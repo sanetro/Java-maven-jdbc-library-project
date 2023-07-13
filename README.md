@@ -4,6 +4,10 @@
 
 <p>Welcome to the Java Maven JDBC Library project! Before you begin working with the project, make sure you have all the necessary tools installed. To smoothly work with the project, we recommend following these steps:</p>
 
+<!-- Image -->
+<h2>Sample Screenshot</h2>
+<img src="https://raw.githubusercontent.com/sanetro/Java-maven-jdbc-library-project/master/assets/screenshots/results1.png" alt="Sample Screenshot">
+
 <!-- Step 1: Install Java Compiler -->
 <h2>1. Install Java Compiler</h2>
 <p>Ensure that you have the Java compiler installed on your computer. You can check this by executing the following command in your command line:</p>

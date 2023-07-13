@@ -37,7 +37,7 @@ public class GUIconsole {
         JTextField loginInput = new JTextField(20);
         JTextField passwordInput = new JTextField(20);
         ImageIcon imageIcon = new ImageIcon("./src/main/resources/Icons/booksSimple-small2.png");
-        System.out.println(imageIcon.getIconWidth());
+        // System.out.println(imageIcon.getIconWidth());
         JLabel imageLabel = new JLabel(imageIcon);
 
         JPanel panelSouth = new JPanel();
